@@ -649,7 +649,7 @@ Gets the TTCode for the printer. This is used for authentication to the webcam s
 **Reqeust**
 ```json
 {
-		"dev_id": "{DEVICE_ID}"
+	"dev_id": "{DEVICE_ID}"
 }
 ```
 
