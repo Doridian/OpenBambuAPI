@@ -470,6 +470,43 @@ Unloads the filament.
 }
 ```
 
+## print.project_file
+
+Prints a "project"
+
+**Request**
+```json
+{
+    "print": {
+        "sequence_id": "0",
+        "command": "project_file",
+        "param": "Metadata/plate_X.gcode",
+        "project_id": "0", // Always 0 for local prints
+        "profile_id": "0", // Always 0 for local prints
+        "task_id": "0", // Always 0 for local prints
+        "subtask_id": "0", // Always 0 for local prints
+        "subtask_name": "",
+
+        "file": "", // Filename to print
+        "url": "file:///mnt/sdcard", // URL to print. I assume root path?
+        "md5": "",
+
+        "timelapse": true,
+        "bed_type": "auto", // Always "auto" for local prints
+        "bed_levelling": true,
+        "flow_cali": true,
+        "vibration_cali": true,
+        "layer_inspect": true,
+        "ams_mapping": "",
+        "use_ams": false
+    }
+}
+```
+
+**Report**
+
+See basic structure
+
 ## system.ledctrl
 
 Controls the LEDs of the printer.
