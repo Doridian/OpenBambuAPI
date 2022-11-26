@@ -560,3 +560,141 @@ Configures the XCam (camera AI features, including Micro LIDAR features).
 **Report**
 
 See basic structure
+
+# Unsolicited (or semi-solicited) reports
+
+## print.push_status
+
+Reports printer status
+
+```json
+{
+    "print": {
+        "ams": {
+            "ams": [],
+            "ams_exist_bits": "0",
+            "ams_new_detect_flag": false,
+            "insert_flag": true,
+            "power_on_flag": false,
+            "tray_exist_bits": "0",
+            "tray_is_bbl_bits": "0",
+            "tray_now": "255",
+            "tray_read_done_bits": "0",
+            "tray_reading_bits": "0",
+            "tray_tar": "255",
+            "version": 0
+        },
+        "ams_rfid_status": 6,
+        "ams_status": 0,
+        "bed_target_temper": 25.0,
+        "bed_temper": 25.0,
+        "big_fan1_speed": "0",
+        "big_fan2_speed": "0",
+        "chamber_temper": 24.0,
+        "command": "push_status",
+        "cooling_fan_speed": "0",
+        "fail_reason": "0",
+        "force_upgrade": false,
+        "gcode_file": "",
+        "gcode_file_prepare_percent": "0",
+        "gcode_start_time": "0",
+        "gcode_state": "IDLE",
+        "heatbreak_fan_speed": "0",
+        "hms": [],
+        "home_flag": 0,
+        "hw_switch_state": 1,
+        "ipcam": {
+            "ipcam_dev": "1",
+            "ipcam_record": "disable",
+            "timelapse": "disable"
+        },
+        "lifecycle": "product",
+        "lights_report": [
+            {
+                "mode": "on",
+                "node": "chamber_light"
+            },
+            {
+                "mode": "flashing",
+                "node": "work_light"
+            }
+        ],
+        "mc_percent": 0,
+        "mc_print_error_code": "0",
+        "mc_print_stage": "1",
+        "mc_print_sub_stage": 0,
+        "mc_remaining_time": 0,
+        "mess_production_state": "active",
+        "nozzle_target_temper": 25.0,
+        "nozzle_temper": 25.0,
+        "online": {
+            "ahb": false,
+            "rfid": false
+        },
+        "print_error": 0,
+        "print_gcode_action": 0,
+        "print_real_action": 0,
+        "print_type": "",
+        "profile_id": "",
+        "project_id": "",
+        "sdcard": true,
+        "sequence_id": "2021",
+        "spd_lvl": 2,
+        "spd_mag": 100,
+        "stg": [],
+        "stg_cur": -1,
+        "subtask_id": "",
+        "subtask_name": "",
+        "task_id": "",
+        "upgrade_state": {
+            "ahb_new_version_number": "",
+            "ams_new_version_number": "",
+            "consistency_request": false,
+            "dis_state": 0,
+            "err_code": 0,
+            "force_upgrade": false,
+            "message": "",
+            "module": "null",
+            "new_version_state": 2,
+            "ota_new_version_number": "",
+            "progress": "0",
+            "sequence_id": 0,
+            "status": "IDLE"
+        },
+        "upload": {
+            "file_size": 0,
+            "finish_size": 0,
+            "message": "Good",
+            "oss_url": "",
+            "progress": 0,
+            "sequence_id": "0903",
+            "speed": 0,
+            "status": "idle",
+            "task_id": "",
+            "time_remaining": 0,
+            "trouble_id": ""
+        },
+        "wifi_signal": "-45dBm",
+        "xcam": {
+            "first_layer_inspector": true,
+            "print_halt": false,
+            "spaghetti_detector": true
+        },
+        "xcam_status": "0"
+    }
+}
+```
+
+## mc_print.push_info
+
+Reports log lines of the printer. Can be requested with the `pushing.pushall` request.
+
+```json
+{
+    "mc_print": {
+        "command": "push_info",
+        "param": "[LINK] GcodeLine (8) l=15 from 0600 ok: M106 P2 S255 \n\n",
+        "sequence_id": "107"
+    }
+}
+```
