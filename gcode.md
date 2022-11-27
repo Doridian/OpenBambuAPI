@@ -107,28 +107,35 @@ M400 P100
 
 # Custom commands
 
-`M620 C#` - calibrate AMS by AMS index
-`M620 R#` - refresh AMS by tray index
-`M620 P#` - select AMS tray by tray index
-`M620 S#` - select AMS by tray index
+## M620
 
+- `M620 C#` - calibrate AMS by AMS index
+- `M620 R#` - refresh AMS by tray index
+- `M620 P#` - select AMS tray by tray index
+- `M620 S#` - select AMS by tray index
 
-`M621 S#`- load filament in AMS by tray index
+## M621
 
+- `M621 S#`- load filament in AMS by tray index
 
-`M973 S1` - likely enable scanner
-`M973 S2 P16000` - likely perform scan
-`M973 S3 P1` - camera start stream
-`M973 S4` - disable scanner
+## M973
 
+- `M973 S1` - likely enable scanner
+- `M973 S2 P16000` - likely perform scan
+- `M973 S3 P1` - camera start stream
+- `M973 S4` - disable scanner
 
-`M976 S1 P1` - first layet scan
-`M976 S2 P1` - hot bed scan before print
+## M976
 
+- `M976 S1 P1` - first layet scan
+- `M976 S2 P1` - hot bed scan before print
 
-`M981 S0 P20000` - disable spaghetti detector
-`M981 S1 P20000` - enable spaghetti detector
+## M981
 
+- `M981 S0 P20000` - disable spaghetti detector
+- `M981 S1 P20000` - enable spaghetti detector
 
-`M1003 S0` - disable power loss recovery
-`M1003 S1` - enable power loss recovery
+## M1003
+
+- `M1003 S0` - disable power loss recovery
+- `M1003 S1` - enable power loss recovery
