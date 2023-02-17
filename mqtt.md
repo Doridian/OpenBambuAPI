@@ -588,7 +588,7 @@ Configures the XCam (camera AI features, including Micro LIDAR features).
 
 ```json
 {
-    "camera": {
+    "xcam": {
         "sequence_id": "0",
         "command": "xcam_control_set",
         "module_name": "first_layer_inspector", // "first_layer_inspector" or "spaghetti_detector"
