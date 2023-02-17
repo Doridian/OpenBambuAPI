@@ -6,4 +6,4 @@ TLS: **no**
 
 **Username:** `bblp`
 
-**Password:** `dev_access_code` from a `Device` object.
+**Password:** `dev_access_code` from a `Device` object (aka the LAN access code).

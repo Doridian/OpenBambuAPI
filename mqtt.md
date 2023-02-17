@@ -18,11 +18,15 @@ Authentication: **required**
 
 ## Local MQTT server
 
-URL: `mqtt://{PRINTER_IP}:1883`
+URL: `mqtt://{PRINTER_IP}:8883`
 
-TLS: **no**
+TLS: **yes**
 
-Authentication: **disabled**
+Authentication: **required**
+
+**Username:** `bblp`
+
+**Password:** `dev_access_code` from a `Device` object (aka the LAN access code).
 
 Wildcard subscriptions with `#` possible
 
