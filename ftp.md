@@ -1,8 +1,8 @@
 # Basics
 
-URL: `ftp://{DEVICE_IP}:21`
+URL: `ftps://{DEVICE_IP}:990`
 
-TLS: **no**
+TLS: implicit
 
 **Username:** `bblp`
 
