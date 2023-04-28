@@ -270,8 +270,6 @@ Return the firmware history of the printer
 ## Trigger downgrade
 TODO
 
-
-
 ## print.stop
 
 Stops a print. Sent with QoS of **1** for higher priority.
