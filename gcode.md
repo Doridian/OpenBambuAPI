@@ -107,6 +107,12 @@ M400 P100
 
 # Custom commands
 
+## M106
+
+- `M106 P1 S0-255`- set part cooling fan speed (0 off, 255 100%)
+- `M106 P2 S0-255`- set aux fan speed
+- `M106 P3 S0-255`- set chamber fan speed
+
 ## M620
 
 - `M620 C#` - calibrate AMS by AMS index
@@ -117,6 +123,11 @@ M400 P100
 ## M621
 
 - `M621 S#`- load filament in AMS by tray index
+
+## M960
+
+- `M960 S5 P0/1`- turn off (0) or on (1) the logo light on toolhead
+- `M960 S4 P0/1`- turn off (0) or on (1) the nozzle light 
 
 ## M973
 
