@@ -548,8 +548,8 @@ Prints a "project"
         "subtask_id": "0", // Always 0 for local prints
         "subtask_name": "",
 
-        "file": "", // Filename to print
-        "url": "file:///mnt/sdcard", // URL to print. I assume root path?
+        "file": "", // Filename to print, not needed when "url" is specified with filepath
+        "url": "file:///mnt/sdcard", // URL to print. Root path, protocol can vary. E.g., if sd card, "ftp:///myfile.3mf", "ftp:///cache/myotherfile.3mf"
         "md5": "",
 
         "timelapse": true,
@@ -669,29 +669,112 @@ Reports printer status
 {
     "print": {
         "ams": {
-            "ams": [],
-            "ams_exist_bits": "0",
-            "ams_new_detect_flag": false,
-            "insert_flag": true,
-            "power_on_flag": false,
-            "tray_exist_bits": "0",
-            "tray_is_bbl_bits": "0",
-            "tray_now": "255",
-            "tray_read_done_bits": "0",
-            "tray_reading_bits": "0",
-            "tray_tar": "255",
-            "version": 0
+            "ams": [
+              {
+                "humidity": "4",
+                "id": "0",
+                "temp": "22.7",
+                "tray": [
+                    {
+                        "id": "0" // an empty tray
+                    },
+                    {
+                        "bed_temp": "0",
+                        "bed_temp_type": "0",
+                        "cols": [
+                            "000000FF"
+                        ],
+                        "drying_temp": "0",
+                        "drying_time": "0",
+                        "id": "1",
+                        "nozzle_temp_max": "240",
+                        "nozzle_temp_min": "190",
+                        "remain": 0,
+                        "tag_uid": "0000000000000000",
+                        "tray_color": "000000FF",
+                        "tray_diameter": "0.00",
+                        "tray_id_name": "",
+                        "tray_info_idx": "GFA00",
+                        "tray_sub_brands": "",
+                        "tray_type": "PLA",
+                        "tray_uuid": "00000000000000000000000000000000",
+                        "tray_weight": "0",
+                        "xcam_info": "000000000000000000000000"
+                    },
+                    {
+                        "bed_temp": "0",
+                        "bed_temp_type": "0",
+                        "cols": [
+                            "DFE2E3FF"
+                        ],
+                        "drying_temp": "0",
+                        "drying_time": "0",
+                        "id": "2",
+                        "nozzle_temp_max": "240",
+                        "nozzle_temp_min": "190",
+                        "remain": 0,
+                        "tag_uid": "0000000000000000",
+                        "tray_color": "DFE2E3FF",
+                        "tray_diameter": "0.00",
+                        "tray_id_name": "",
+                        "tray_info_idx": "GFA05",
+                        "tray_sub_brands": "",
+                        "tray_type": "PLA",
+                        "tray_uuid": "00000000000000000000000000000000",
+                        "tray_weight": "0",
+                        "xcam_info": "000000000000000000000000"
+                    },
+                    {
+                        "bed_temp": "0",
+                        "bed_temp_type": "0",
+                        "cols": [
+                            "F95959FF"
+                        ],
+                        "drying_temp": "0",
+                        "drying_time": "0",
+                        "id": "3",
+                        "nozzle_temp_max": "240",
+                        "nozzle_temp_min": "190",
+                        "remain": 0,
+                        "tag_uid": "0000000000000000",
+                        "tray_color": "F95959FF",
+                        "tray_diameter": "0.00",
+                        "tray_id_name": "",
+                        "tray_info_idx": "GFL00",
+                        "tray_sub_brands": "",
+                        "tray_type": "PLA",
+                        "tray_uuid": "00000000000000000000000000000000",
+                        "tray_weight": "0",
+                        "xcam_info": "000000000000000000000000"
+                    }
+                ]
+            }
+        ],
+        "ams_exist_bits": "1",
+        "insert_flag": true,
+        "power_on_flag": false,
+        "tray_exist_bits": "e",
+        "tray_is_bbl_bits": "e",
+        "tray_now": "255", // 254 if external spool / vt_tray, otherwise is ((ams_id * 4) + tray_id) for current tray (ams 2 tray 2 would be (1*4)+1 = 5)
+        "tray_pre": "255",
+        "tray_read_done_bits": "e",
+        "tray_reading_bits": "0",
+        "tray_tar": "255",
+        "version": 4
         },
         "ams_rfid_status": 6,
         "ams_status": 0,
+        "aux_part_fan": true, // is aux fan installed
         "bed_target_temper": 25.0,
         "bed_temper": 25.0,
-        "big_fan1_speed": "0",
-        "big_fan2_speed": "0",
+        "big_fan1_speed": "0", // Auxilliary fan
+        "big_fan2_speed": "0", // Chamber fan
         "chamber_temper": 24.0,
         "command": "push_status",
-        "cooling_fan_speed": "0",
+        "cooling_fan_speed": "0", // Part Cooling fan
         "fail_reason": "0",
+        "fan_gear": 0,
+        "filam_bak": [],
         "force_upgrade": false,
         "gcode_file": "",
         "gcode_file_prepare_percent": "0",
@@ -704,8 +787,10 @@ Reports printer status
         "ipcam": {
             "ipcam_dev": "1",
             "ipcam_record": "disable",
+            "resolution": "1080p",
             "timelapse": "disable"
         },
+        "layer_num": 0,
         "lifecycle": "product",
         "lights_report": [
             {
@@ -717,17 +802,20 @@ Reports printer status
                 "node": "work_light"
             }
         ],
+        "maintain": 3,
         "mc_percent": 0,
         "mc_print_error_code": "0",
         "mc_print_stage": "1",
         "mc_print_sub_stage": 0,
         "mc_remaining_time": 0,
         "mess_production_state": "active",
+        "nozzle_diameter": "0.4",
         "nozzle_target_temper": 25.0,
         "nozzle_temper": 25.0,
         "online": {
             "ahb": false,
-            "rfid": false
+            "rfid": false,
+            "version": 9
         },
         "print_error": 0,
         "print_gcode_action": 0,
@@ -735,6 +823,7 @@ Reports printer status
         "print_type": "",
         "profile_id": "",
         "project_id": "",
+        "queue_number": 0,
         "sdcard": true,
         "sequence_id": "2021",
         "spd_lvl": 2,
@@ -744,6 +833,7 @@ Reports printer status
         "subtask_id": "",
         "subtask_name": "",
         "task_id": "",
+        "total_layer_num": 0,
         "upgrade_state": {
             "ahb_new_version_number": "",
             "ams_new_version_number": "",
@@ -772,10 +862,37 @@ Reports printer status
             "time_remaining": 0,
             "trouble_id": ""
         },
+        "vt_tray": { // external spool
+            "bed_temp": "0",
+            "bed_temp_type": "0",
+            "cols": [
+                "00000000"
+            ],
+            "drying_temp": "0",
+            "drying_time": "0",
+            "id": "254",
+            "nozzle_temp_max": "0",
+            "nozzle_temp_min": "0",
+            "remain": 0,
+            "tag_uid": "0000000000000000",
+            "tray_color": "00000000",
+            "tray_diameter": "0.00",
+            "tray_id_name": "",
+            "tray_info_idx": "",
+            "tray_sub_brands": "",
+            "tray_type": "",
+            "tray_uuid": "00000000000000000000000000000000",
+            "tray_weight": "0",
+            "xcam_info": "000000000000000000000000"
+            },
         "wifi_signal": "-45dBm",
         "xcam": {
+            "allow_skip_parts": false,
+            "buildplate_marker_detector": false,
             "first_layer_inspector": true,
-            "print_halt": false,
+            "halt_print_sensitivity": "medium",
+            "print_halt": true,
+            "printing_monitor": true,
             "spaghetti_detector": true
         },
         "xcam_status": "0"
@@ -797,3 +914,30 @@ Reports log lines of the printer. Can be requested with the `pushing.pushall` re
 }
 ```
 
+## mc_print.command = "push_info", mc_print.param = "[BMC] M900 KX.XXXX, LX.XXXXX, MX.XXXXX"
+
+Report after Lidar calibration of the pressure advance (the reported K value)
+
+```json
+{
+    "mc_print": {
+        "command": "push_info",
+        "param": "[BMC] M900 KX.XXXX, LX.XXXXX, MX.XXXXX",
+        "sequence_id": "2004"
+    }
+}
+```
+
+## mc_print.command = "push_info", mc_print.param = "[AMS][TASK]amsX temp:XX.X;humidity:XX%;humidity_idx:X"
+
+Report for the raw value for AMS humidity % per AMS id
+
+```json
+{
+    "mc_print": {
+        "command":"push_info",
+        "param":"[AMS][TASK]ams0 temp:18.4;humidity:30%;humidity_idx:4",
+        "sequence_id":"83"
+    }
+}
+```
