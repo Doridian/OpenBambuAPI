@@ -213,6 +213,63 @@ Part of firmware upgrade process
 
 TODO
 
+## upgrade.get_history
+
+Return the firmware history of the printer
+
+**Request**
+
+```json
+{
+    "upgrade": {
+        "sequence_id": "0",
+        "command": "get_history"
+    }
+}
+```
+
+**Report**
+
+```json
+{
+  "upgrade": {
+    "command": "get_history",
+    "firmware_optional": [
+      {
+        "ams": [
+          {
+            "address": 0,
+            "dev_model_name": "BL-A001",
+            "device_id": "{DEVICE_ID}",
+            "firmware": [
+              {
+                "description": "",
+                "force_update": false,
+                "url": "http://public-cdn.bambulab.com/upgrade/device/BL-A001/00.00.05.96/product/ams-ota_v00.00.05.96-20230106163615.json.sig",
+                "version": "00.00.05.96"
+              }
+            ],
+            "firmware_current": null
+          }
+        ],
+        "firmware": {
+          "description": "",
+          "force_update": false,
+          "url": "https://public-cdn.bambulab.com/upgrade/device/BL-P001/01.04.01.00/product/ota-v01.04.01.00-20230227162230.json.sig",
+          "version": "01.04.01.00"
+        }
+      }
+    ],
+    "reason": "",
+    "result": "success",
+    "sequence_id": "0"
+  }
+}
+```
+
+## Trigger downgrade
+TODO
+
 ## print.stop
 
 Stops a print. Sent with QoS of **1** for higher priority.
@@ -739,3 +796,4 @@ Reports log lines of the printer. Can be requested with the `pushing.pushall` re
     }
 }
 ```
+
