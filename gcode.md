@@ -138,7 +138,7 @@ M400 P100
 
 ## M976
 
-- `M976 S1 P1` - first layet scan
+- `M976 S1 P1` - first layer scan
 - `M976 S2 P1` - hot bed scan before print
 
 ## M981
