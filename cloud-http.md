@@ -34,7 +34,7 @@ Error responses tend to follow the following format. As do success messages for 
 
 ## GET /v1/user-service/my/messages
 
-Returns list of messages, looks like a pretter bare Elasticsearch response.
+Returns list of messages, looks like a pretty bare Elasticsearch response.
 
 Can take the optional query parameters `type`, `after` and `limit`.
 
@@ -72,7 +72,7 @@ Can take the optional query parameters `type`, `after` and `limit`.
 
 ## GET /v1/user-service/my/tasks
 
-Returns list of tasks, looks like a pretter bare Elasticsearch response.
+Returns list of tasks, looks like a pretty bare Elasticsearch response.
 
 Can take the optional query parameters `deviceId`, `after` and `limit`.
 
@@ -131,7 +131,7 @@ Returns a ticket, probably means support tickets. Don't have any to test.
 }
 ```
 
-## GET /iot-service/api/slicer/resource
+## GET /v1/iot-service/api/slicer/resource
 
 Returns a bunch of resources, downloadable things for the slicer.
 
@@ -166,7 +166,7 @@ Known types (with example version) are:
 }
 ```
 
-## GET /iot-service/api/slicer/setting?version={SLICER_VERSION}
+## GET /v1/iot-service/api/slicer/setting?version={SLICER_VERSION}
 
 Returns a list of possible slicer profiles (`print`, `printer` and `material`) to query.
 
@@ -255,7 +255,7 @@ Returns a list of possible slicer profiles (`print`, `printer` and `material`) t
 }
 ```
 
-## GET /iot-service/api/slicer/setting/{SETTING_ID}
+## GET /v1/iot-service/api/slicer/setting/{SETTING_ID}
 
 Gets the full data of a slicer setting by its id.
 
@@ -294,7 +294,7 @@ Gets the full data of a slicer setting by its id.
 }
 ```
 
-## GET /iot-service/api/user/bind
+## GET /v1/iot-service/api/user/bind
 
 This lists devices "bound" to the current user. As in, all your devices.
 
@@ -318,7 +318,7 @@ This lists devices "bound" to the current user. As in, all your devices.
 }
 ```
 
-## PATCH /iot-service/api/user/device/info
+## PATCH /v1/iot-service/api/user/device/info
 
 This is to update device info. Likely only the name.
 
@@ -339,7 +339,7 @@ This is to update device info. Likely only the name.
 }
 ```
 
-## GET /iot-service/api/user/device/version?dev_id={DEVICE_ID}
+## GET /v1/iot-service/api/user/device/version?dev_id={DEVICE_ID}
 
 Queries information about firmware version and updates for a device.
 
@@ -367,11 +367,11 @@ Queries information about firmware version and updates for a device.
 }
 ```
 
-## GET /iot-service/api/user/notification?action={ACTION}&ticket={TICKET_ID}
+## GET /v1/iot-service/api/user/notification?action={ACTION}&ticket={TICKET_ID}
 
 `ACTION` must be either `upload` or `import_mesh`
 
-## GET /iot-service/api/user/print
+## GET /v1/iot-service/api/user/print
 
 This accepts the optional query parameter `force`, which the slicer always sets to `true`.
 
@@ -406,7 +406,7 @@ The response is the current status of the printer.
 }
 ```
 
-## GET /iot-service/api/user/profile/{PROFILE_ID}?model_id={MODEL_ID}
+## GET /v1/iot-service/api/user/profile/{PROFILE_ID}?model_id={MODEL_ID}
 
 Queries the details of a profile for a certain model, likely for profile deviations?
 
@@ -490,7 +490,7 @@ Queries the details of a profile for a certain model, likely for profile deviati
 }
 ```
 
-## GET /iot-service/api/user/project
+## GET /v1/iot-service/api/user/project
 
 Queries a list of projects for the current user.
 
@@ -516,7 +516,7 @@ Queries a list of projects for the current user.
 }
 ```
 
-## GET /iot-service/api/user/project/{PROJECT_ID}
+## GET /v1/iot-service/api/user/project/{PROJECT_ID}
 
 Gets full details about a single project.
 
@@ -614,7 +614,7 @@ Gets full details about a single project.
 }
 ```
 
-## GET /iot-service/api/user/task/{TASK_ID}
+## GET /v1/iot-service/api/user/task/{TASK_ID}
 
 Gets information about a task. So far this has always yielded a 403 even on my own tasks.
 
@@ -642,11 +642,11 @@ Gets information about a task. So far this has always yielded a 403 even on my o
 }
 ```
 
-## POST /iot-service/api/user/ttcode
+## POST /v1/iot-service/api/user/ttcode
 
 Gets the TTCode for the printer. This is used for authentication to the webcam stream.
 
-**Reqeust**
+**Request**
 ```json
 {
 	"dev_id": "{DEVICE_ID}"
