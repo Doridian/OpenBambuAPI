@@ -34,7 +34,7 @@ Error responses tend to follow the following format. As do success messages for 
 
 ## GET /v1/user-service/my/messages
 
-Returns list of messages, looks like a pretter bare Elasticsearch response.
+Returns list of messages, looks like a pretty bare Elasticsearch response.
 
 Can take the optional query parameters `type`, `after` and `limit`.
 
@@ -72,7 +72,7 @@ Can take the optional query parameters `type`, `after` and `limit`.
 
 ## GET /v1/user-service/my/tasks
 
-Returns list of tasks, looks like a pretter bare Elasticsearch response.
+Returns list of tasks, looks like a pretty bare Elasticsearch response.
 
 Can take the optional query parameters `deviceId`, `after` and `limit`.
 
@@ -646,7 +646,7 @@ Gets information about a task. So far this has always yielded a 403 even on my o
 
 Gets the TTCode for the printer. This is used for authentication to the webcam stream.
 
-**Reqeust**
+**Request**
 ```json
 {
 	"dev_id": "{DEVICE_ID}"
