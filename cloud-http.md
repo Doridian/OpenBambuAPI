@@ -8,9 +8,27 @@ The API is available at a base path of `https://api.bambulab.com`. All URLs belo
 
 All requests (except to the token refresh endpoint) must be made by presenting an `Authorization` header in the form of `Bearer {ACCESS_TOKEN}`.
 
-To obtain an access token, the `/user-service/user/refreshtoken` endpoint must be used.
+## Login and get a token
 
-To obtain a refresh token, sign in at https://bambulab.com/en and grab it out of your cookies (for now).
+## POST https://bambulab.com/api/sign-in/form
+
+**Request**
+```json
+{
+    "account": "<EMAIL>",
+    "password":"<PASSWORD",
+    "apiError":""
+}
+```
+
+**Response**
+
+Here you grab the `set-cookie` headers, pull the `token` and `refreshToken` from the Cookie headers and use that for the API calls.
+
+The response data isn't needed at all, just included for clarity.
+```json
+{"tfaKey":""}
+```
 
 ## Requests
 
@@ -113,6 +131,8 @@ Creates a task, expects a task object (see above) to be passed via the body.
 Returns a ticket, probably means support tickets. Don't have any to test.
 
 ## POST /v1/user-service/user/refreshtoken
+
+Send a valid `refreshToken` and get new tokens with new expiration times.
 
 **Request**
 ```json
