@@ -132,7 +132,12 @@ Get current version of printer
 
 ## pushing.pushall
 
-Unknown, probably a request for the printer to report its full status
+Reports the complete status of the printer. 
+
+This is unnecessary for the X1 series since it already transmits the full object each time. However, the P1 series only sends the values that have been updated compared to the previous report.
+
+> [!CAUTION]
+> As a rule of thumb, refrain from executing this command at intervals less than 5 minutes on the P1P, as it may cause lag due to its hardware limitations.
 
 **Request**
 
@@ -147,7 +152,240 @@ Unknown, probably a request for the printer to report its full status
 
 **Report**
 
-No response, pushes a bunch of `mc_print` type reports if the printer has any in queue
+```json
+{
+    "print": {
+        "ams": {
+            "ams": [
+              {
+                "humidity": "4",
+                "id": "0",
+                "temp": "22.7",
+                "tray": [
+                    {
+                        "id": "0" // an empty tray
+                    },
+                    {
+                        "bed_temp": "0",
+                        "bed_temp_type": "0",
+                        "cols": [
+                            "000000FF"
+                        ],
+                        "drying_temp": "0",
+                        "drying_time": "0",
+                        "id": "1",
+                        "nozzle_temp_max": "240",
+                        "nozzle_temp_min": "190",
+                        "remain": 0,
+                        "tag_uid": "0000000000000000",
+                        "tray_color": "000000FF",
+                        "tray_diameter": "0.00",
+                        "tray_id_name": "",
+                        "tray_info_idx": "GFA00",
+                        "tray_sub_brands": "",
+                        "tray_type": "PLA",
+                        "tray_uuid": "00000000000000000000000000000000",
+                        "tray_weight": "0",
+                        "xcam_info": "000000000000000000000000"
+                    },
+                    {
+                        "bed_temp": "0",
+                        "bed_temp_type": "0",
+                        "cols": [
+                            "DFE2E3FF"
+                        ],
+                        "drying_temp": "0",
+                        "drying_time": "0",
+                        "id": "2",
+                        "nozzle_temp_max": "240",
+                        "nozzle_temp_min": "190",
+                        "remain": 0,
+                        "tag_uid": "0000000000000000",
+                        "tray_color": "DFE2E3FF",
+                        "tray_diameter": "0.00",
+                        "tray_id_name": "",
+                        "tray_info_idx": "GFA05",
+                        "tray_sub_brands": "",
+                        "tray_type": "PLA",
+                        "tray_uuid": "00000000000000000000000000000000",
+                        "tray_weight": "0",
+                        "xcam_info": "000000000000000000000000"
+                    },
+                    {
+                        "bed_temp": "0",
+                        "bed_temp_type": "0",
+                        "cols": [
+                            "F95959FF"
+                        ],
+                        "drying_temp": "0",
+                        "drying_time": "0",
+                        "id": "3",
+                        "nozzle_temp_max": "240",
+                        "nozzle_temp_min": "190",
+                        "remain": 0,
+                        "tag_uid": "0000000000000000",
+                        "tray_color": "F95959FF",
+                        "tray_diameter": "0.00",
+                        "tray_id_name": "",
+                        "tray_info_idx": "GFL00",
+                        "tray_sub_brands": "",
+                        "tray_type": "PLA",
+                        "tray_uuid": "00000000000000000000000000000000",
+                        "tray_weight": "0",
+                        "xcam_info": "000000000000000000000000"
+                    }
+                ]
+            }
+        ],
+        "ams_exist_bits": "1",
+        "insert_flag": true,
+        "power_on_flag": false,
+        "tray_exist_bits": "e",
+        "tray_is_bbl_bits": "e",
+        "tray_now": "255", // 254 if external spool / vt_tray, otherwise is ((ams_id * 4) + tray_id) for current tray (ams 2 tray 2 would be (1*4)+1 = 5)
+        "tray_pre": "255",
+        "tray_read_done_bits": "e",
+        "tray_reading_bits": "0",
+        "tray_tar": "255",
+        "version": 4
+        },
+        "ams_rfid_status": 6,
+        "ams_status": 0,
+        "aux_part_fan": true, // is aux fan installed
+        "bed_target_temper": 25.0,
+        "bed_temper": 25.0,
+        "big_fan1_speed": "0", // Auxilliary fan
+        "big_fan2_speed": "0", // Chamber fan
+        "chamber_temper": 24.0,
+        "command": "push_status",
+        "cooling_fan_speed": "0", // Part Cooling fan
+        "fail_reason": "0",
+        "fan_gear": 0,
+        "filam_bak": [],
+        "force_upgrade": false,
+        "gcode_file": "",
+        "gcode_file_prepare_percent": "0",
+        "gcode_start_time": "0",
+        "gcode_state": "IDLE",
+        "heatbreak_fan_speed": "0",
+        "hms": [],
+        "home_flag": 0,
+        "hw_switch_state": 1,
+        "ipcam": {
+            "ipcam_dev": "1",
+            "ipcam_record": "disable",
+            "resolution": "1080p",
+            "timelapse": "disable"
+        },
+        "layer_num": 0,
+        "lifecycle": "product",
+        "lights_report": [
+            {
+                "mode": "on",
+                "node": "chamber_light"
+            },
+            {
+                "mode": "flashing",
+                "node": "work_light"
+            }
+        ],
+        "maintain": 3,
+        "mc_percent": 0,
+        "mc_print_error_code": "0",
+        "mc_print_stage": "1",
+        "mc_print_sub_stage": 0,
+        "mc_remaining_time": 0,
+        "mess_production_state": "active",
+        "nozzle_diameter": "0.4",
+        "nozzle_target_temper": 25.0,
+        "nozzle_temper": 25.0,
+        "online": {
+            "ahb": false,
+            "rfid": false,
+            "version": 9
+        },
+        "print_error": 0,
+        "print_gcode_action": 0,
+        "print_real_action": 0,
+        "print_type": "",
+        "profile_id": "",
+        "project_id": "",
+        "queue_number": 0,
+        "sdcard": true,
+        "sequence_id": "2021",
+        "spd_lvl": 2,
+        "spd_mag": 100,
+        "stg": [],
+        "stg_cur": -1,
+        "subtask_id": "",
+        "subtask_name": "",
+        "task_id": "",
+        "total_layer_num": 0,
+        "upgrade_state": {
+            "ahb_new_version_number": "",
+            "ams_new_version_number": "",
+            "consistency_request": false,
+            "dis_state": 0,
+            "err_code": 0,
+            "force_upgrade": false,
+            "message": "",
+            "module": "null",
+            "new_version_state": 2,
+            "ota_new_version_number": "",
+            "progress": "0",
+            "sequence_id": 0,
+            "status": "IDLE"
+        },
+        "upload": {
+            "file_size": 0,
+            "finish_size": 0,
+            "message": "Good",
+            "oss_url": "",
+            "progress": 0,
+            "sequence_id": "0903",
+            "speed": 0,
+            "status": "idle",
+            "task_id": "",
+            "time_remaining": 0,
+            "trouble_id": ""
+        },
+        "vt_tray": { // external spool
+            "bed_temp": "0",
+            "bed_temp_type": "0",
+            "cols": [
+                "00000000"
+            ],
+            "drying_temp": "0",
+            "drying_time": "0",
+            "id": "254",
+            "nozzle_temp_max": "0",
+            "nozzle_temp_min": "0",
+            "remain": 0,
+            "tag_uid": "0000000000000000",
+            "tray_color": "00000000",
+            "tray_diameter": "0.00",
+            "tray_id_name": "",
+            "tray_info_idx": "",
+            "tray_sub_brands": "",
+            "tray_type": "",
+            "tray_uuid": "00000000000000000000000000000000",
+            "tray_weight": "0",
+            "xcam_info": "000000000000000000000000"
+            },
+        "wifi_signal": "-45dBm",
+        "xcam": {
+            "allow_skip_parts": false,
+            "buildplate_marker_detector": false,
+            "first_layer_inspector": true,
+            "halt_print_sensitivity": "medium",
+            "print_halt": true,
+            "printing_monitor": true,
+            "spaghetti_detector": true
+        },
+        "xcam_status": "0"
+    }
+}
+```
 
 ## upgrade.upgrade_confirm
 
@@ -665,244 +903,15 @@ See basic structure
 
 Reports printer status
 
-```json
-{
-    "print": {
-        "ams": {
-            "ams": [
-              {
-                "humidity": "4",
-                "id": "0",
-                "temp": "22.7",
-                "tray": [
-                    {
-                        "id": "0" // an empty tray
-                    },
-                    {
-                        "bed_temp": "0",
-                        "bed_temp_type": "0",
-                        "cols": [
-                            "000000FF"
-                        ],
-                        "drying_temp": "0",
-                        "drying_time": "0",
-                        "id": "1",
-                        "nozzle_temp_max": "240",
-                        "nozzle_temp_min": "190",
-                        "remain": 0,
-                        "tag_uid": "0000000000000000",
-                        "tray_color": "000000FF",
-                        "tray_diameter": "0.00",
-                        "tray_id_name": "",
-                        "tray_info_idx": "GFA00",
-                        "tray_sub_brands": "",
-                        "tray_type": "PLA",
-                        "tray_uuid": "00000000000000000000000000000000",
-                        "tray_weight": "0",
-                        "xcam_info": "000000000000000000000000"
-                    },
-                    {
-                        "bed_temp": "0",
-                        "bed_temp_type": "0",
-                        "cols": [
-                            "DFE2E3FF"
-                        ],
-                        "drying_temp": "0",
-                        "drying_time": "0",
-                        "id": "2",
-                        "nozzle_temp_max": "240",
-                        "nozzle_temp_min": "190",
-                        "remain": 0,
-                        "tag_uid": "0000000000000000",
-                        "tray_color": "DFE2E3FF",
-                        "tray_diameter": "0.00",
-                        "tray_id_name": "",
-                        "tray_info_idx": "GFA05",
-                        "tray_sub_brands": "",
-                        "tray_type": "PLA",
-                        "tray_uuid": "00000000000000000000000000000000",
-                        "tray_weight": "0",
-                        "xcam_info": "000000000000000000000000"
-                    },
-                    {
-                        "bed_temp": "0",
-                        "bed_temp_type": "0",
-                        "cols": [
-                            "F95959FF"
-                        ],
-                        "drying_temp": "0",
-                        "drying_time": "0",
-                        "id": "3",
-                        "nozzle_temp_max": "240",
-                        "nozzle_temp_min": "190",
-                        "remain": 0,
-                        "tag_uid": "0000000000000000",
-                        "tray_color": "F95959FF",
-                        "tray_diameter": "0.00",
-                        "tray_id_name": "",
-                        "tray_info_idx": "GFL00",
-                        "tray_sub_brands": "",
-                        "tray_type": "PLA",
-                        "tray_uuid": "00000000000000000000000000000000",
-                        "tray_weight": "0",
-                        "xcam_info": "000000000000000000000000"
-                    }
-                ]
-            }
-        ],
-        "ams_exist_bits": "1",
-        "insert_flag": true,
-        "power_on_flag": false,
-        "tray_exist_bits": "e",
-        "tray_is_bbl_bits": "e",
-        "tray_now": "255", // 254 if external spool / vt_tray, otherwise is ((ams_id * 4) + tray_id) for current tray (ams 2 tray 2 would be (1*4)+1 = 5)
-        "tray_pre": "255",
-        "tray_read_done_bits": "e",
-        "tray_reading_bits": "0",
-        "tray_tar": "255",
-        "version": 4
-        },
-        "ams_rfid_status": 6,
-        "ams_status": 0,
-        "aux_part_fan": true, // is aux fan installed
-        "bed_target_temper": 25.0,
-        "bed_temper": 25.0,
-        "big_fan1_speed": "0", // Auxilliary fan
-        "big_fan2_speed": "0", // Chamber fan
-        "chamber_temper": 24.0,
-        "command": "push_status",
-        "cooling_fan_speed": "0", // Part Cooling fan
-        "fail_reason": "0",
-        "fan_gear": 0,
-        "filam_bak": [],
-        "force_upgrade": false,
-        "gcode_file": "",
-        "gcode_file_prepare_percent": "0",
-        "gcode_start_time": "0",
-        "gcode_state": "IDLE",
-        "heatbreak_fan_speed": "0",
-        "hms": [],
-        "home_flag": 0,
-        "hw_switch_state": 1,
-        "ipcam": {
-            "ipcam_dev": "1",
-            "ipcam_record": "disable",
-            "resolution": "1080p",
-            "timelapse": "disable"
-        },
-        "layer_num": 0,
-        "lifecycle": "product",
-        "lights_report": [
-            {
-                "mode": "on",
-                "node": "chamber_light"
-            },
-            {
-                "mode": "flashing",
-                "node": "work_light"
-            }
-        ],
-        "maintain": 3,
-        "mc_percent": 0,
-        "mc_print_error_code": "0",
-        "mc_print_stage": "1",
-        "mc_print_sub_stage": 0,
-        "mc_remaining_time": 0,
-        "mess_production_state": "active",
-        "nozzle_diameter": "0.4",
-        "nozzle_target_temper": 25.0,
-        "nozzle_temper": 25.0,
-        "online": {
-            "ahb": false,
-            "rfid": false,
-            "version": 9
-        },
-        "print_error": 0,
-        "print_gcode_action": 0,
-        "print_real_action": 0,
-        "print_type": "",
-        "profile_id": "",
-        "project_id": "",
-        "queue_number": 0,
-        "sdcard": true,
-        "sequence_id": "2021",
-        "spd_lvl": 2,
-        "spd_mag": 100,
-        "stg": [],
-        "stg_cur": -1,
-        "subtask_id": "",
-        "subtask_name": "",
-        "task_id": "",
-        "total_layer_num": 0,
-        "upgrade_state": {
-            "ahb_new_version_number": "",
-            "ams_new_version_number": "",
-            "consistency_request": false,
-            "dis_state": 0,
-            "err_code": 0,
-            "force_upgrade": false,
-            "message": "",
-            "module": "null",
-            "new_version_state": 2,
-            "ota_new_version_number": "",
-            "progress": "0",
-            "sequence_id": 0,
-            "status": "IDLE"
-        },
-        "upload": {
-            "file_size": 0,
-            "finish_size": 0,
-            "message": "Good",
-            "oss_url": "",
-            "progress": 0,
-            "sequence_id": "0903",
-            "speed": 0,
-            "status": "idle",
-            "task_id": "",
-            "time_remaining": 0,
-            "trouble_id": ""
-        },
-        "vt_tray": { // external spool
-            "bed_temp": "0",
-            "bed_temp_type": "0",
-            "cols": [
-                "00000000"
-            ],
-            "drying_temp": "0",
-            "drying_time": "0",
-            "id": "254",
-            "nozzle_temp_max": "0",
-            "nozzle_temp_min": "0",
-            "remain": 0,
-            "tag_uid": "0000000000000000",
-            "tray_color": "00000000",
-            "tray_diameter": "0.00",
-            "tray_id_name": "",
-            "tray_info_idx": "",
-            "tray_sub_brands": "",
-            "tray_type": "",
-            "tray_uuid": "00000000000000000000000000000000",
-            "tray_weight": "0",
-            "xcam_info": "000000000000000000000000"
-            },
-        "wifi_signal": "-45dBm",
-        "xcam": {
-            "allow_skip_parts": false,
-            "buildplate_marker_detector": false,
-            "first_layer_inspector": true,
-            "halt_print_sensitivity": "medium",
-            "print_halt": true,
-            "printing_monitor": true,
-            "spaghetti_detector": true
-        },
-        "xcam_status": "0"
-    }
-}
-```
+### X1 Series
+The X1 series always responds with the full object. See [`pushing.pushall`](#pushingpushall) for said object.
+
+### P1 Series
+Due to performance limitations the P1P uses the same object, but only actually responds with values that have been changed since the previous report. The full data can be requested using the [`pushing.pushall`](#pushingpushall) request.
 
 ## mc_print.push_info
 
-Reports log lines of the printer. Can be requested with the `pushing.pushall` request.
+Reports log lines of the printer. Can be requested with the [`pushing.pushall`](#pushingpushall) request.
 
 ```json
 {
