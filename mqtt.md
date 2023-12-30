@@ -145,7 +145,9 @@ This is unnecessary for the X1 series since it already transmits the full object
 {
     "pushing": {
         "sequence_id": "0",
-        "command": "pushall"
+        "command": "pushall",
+        "version": 1,
+        "push_target": 1
     }
 }
 ```
