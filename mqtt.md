@@ -836,6 +836,33 @@ Controls the LEDs of the printer.
 
 See basic structure
 
+## system.get_access_code
+
+Gets the LAN access code of the printer
+
+**Request**
+```json
+{
+		"system": {
+				"sequence_id": "0",
+				"command": "get_access_code"
+		}
+}
+```
+
+**Report**
+
+```json
+{
+		"system": {
+				"sequence_id": "0",
+				"command": "get_access_code",
+				"access_code": "{ACCESS_CODE}",
+				"result": "success"
+		}
+}
+```
+
 ## camera.ipcam_record_set
 
 Turns on or off creating a recording of prints.
