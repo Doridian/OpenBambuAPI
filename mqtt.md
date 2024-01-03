@@ -843,10 +843,10 @@ Gets the LAN access code of the printer
 **Request**
 ```json
 {
-		"system": {
-				"sequence_id": "0",
-				"command": "get_access_code"
-		}
+    "system": {
+        "sequence_id": "0",
+        "command": "get_access_code"
+    }
 }
 ```
 
@@ -854,12 +854,12 @@ Gets the LAN access code of the printer
 
 ```json
 {
-		"system": {
-				"sequence_id": "0",
-				"command": "get_access_code",
-				"access_code": "{ACCESS_CODE}",
-				"result": "success"
-		}
+    "system": {
+        "sequence_id": "0",
+        "command": "get_access_code",
+        "access_code": "{ACCESS_CODE}",
+        "result": "success"
+    }
 }
 ```
 
