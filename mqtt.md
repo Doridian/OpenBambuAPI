@@ -141,6 +141,8 @@ This is unnecessary for the X1 series since it already transmits the full object
 
 **Request**
 
+- Old Request
+
 ```json
 {
     "pushing": {
@@ -152,7 +154,33 @@ This is unnecessary for the X1 series since it already transmits the full object
 }
 ```
 
+- New Request
+
+```json
+{
+    "user_id": "0",
+    "sequence_id": "0",
+    "pushing": {
+        "version": 1,
+        "command": "pushall"
+    }
+}
+```
+
+```json
+{
+    "user_id": "0",
+    "pushing": {
+        "sequence_id": "0",
+        "version": 1,
+        "push_target": 1
+    }
+}
+```
+
 **Report**
+
+- Old Report
 
 ```json
 {
@@ -389,6 +417,10 @@ This is unnecessary for the X1 series since it already transmits the full object
 }
 ```
 
+- New Report
+
+TODO
+
 ## upgrade.upgrade_confirm
 
 Part of firmware upgrade process
@@ -436,6 +468,8 @@ Part of firmware upgrade process
 
 **Request**
 
+- Old Request
+  
 ```json
 {
     "upgrade": {
@@ -445,6 +479,29 @@ Part of firmware upgrade process
         "url": "...",
         "module": "ota", // ota or ams
         "version": "",
+    }
+}
+```
+
+- New Request
+
+```json
+{
+    "user_id": "0",
+    "upgrade": {
+        "sequence_id": "0",
+        "command": "upgrade_history",
+        "src_id": 2, // bambu handy
+        "firmware_optional": {
+            "firmware": {
+                "version": "", 
+                "url": "...", 
+                "force_update": false,
+                "description": "",
+                "status": "release"
+            },
+            "ams": []
+        }
     }
 }
 ```
@@ -660,6 +717,27 @@ Gives basic control commands for the AMS.
 
 TODO
 
+## print.auto_recovery
+
+Set print auto recover from step loss
+
+**Request**
+
+```json
+{
+    "print": {
+        "sequence_id": "0",
+        "command": "print_option",
+        "option": 0, // false: 0 or true: 1
+        "auto_recovery": false // false or true
+    }
+}
+```
+
+**Report**
+
+TODO 
+
 ## print.print_speed
 
 Set print speed to one of the 4 presets.
@@ -814,6 +892,8 @@ Controls the LEDs of the printer.
 
 **Request**
 
+- Old Request
+
 ```json
 {
     "system": {
@@ -828,6 +908,24 @@ Controls the LEDs of the printer.
         "led_off_time": 500, // LED off time in ms
         "loop_times":  1, // How many times to loop
         "interval_time": 1000 // Looping interval
+    }
+}
+```
+
+- New Request
+
+```json
+{
+    "user_id": "0",
+    "system": {
+        "sequence_id": "0",
+        "command": "ledctrl",
+        "led_node": "chamber_light", 
+        "led_mode": "off",
+        "led_on_time": 500,
+        "led_off_time": 500,
+        "loop_times": 0,
+        "interval_time": 0
     }
 }
 ```
@@ -862,6 +960,47 @@ Gets the LAN access code of the printer
     }
 }
 ```
+
+## system.set_accessories.nozzle
+
+Set the type and diameter of the printer nozzle
+
+**Request**
+```json
+{
+    "system": {
+        "sequence_id": "2047",
+        "command": "set_accessories",
+        "accessory_type": "nozzle",
+        "nozzle_type": "stainless_steel", // "stainless_steel" or "hardened_steel"
+        "nozzle_diameter": "0.4" // "stainless_steel": "0.2"/"0.4" or "hardened_steel": "0.4"/"0.6"/"0.8"
+    }
+}
+```
+
+**Report**
+
+TODO
+
+## system.set_accessories.upgrade_kit
+
+Set the Printer P1P Official Enclosure Kit
+
+**Request**
+```json
+{
+    "system": {
+        "sequence_id": "2056",
+        "command": "set_accessories",
+        "accessory_type": "upgrade_kit",
+        "upgrade_kit": false // false or true
+    }
+}
+```
+
+**Report**
+
+TODO
 
 ## camera.ipcam_record_set
 
