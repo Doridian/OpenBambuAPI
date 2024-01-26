@@ -565,7 +565,8 @@ Return the firmware history of the printer
 ```
 
 ## Trigger downgrade
-TODO
+
+A new request from upgrade.start also allocates a downgrade
 
 ## print.stop
 
@@ -811,11 +812,28 @@ Starts calibration process.
 
 **Request**
 
+- Old Request
+  
 ```json
 {
     "print": {
         "sequence_id": "0",
         "command": "calibration"
+    }
+}
+```
+
+- New Request
+
+```json
+{
+    "print": {
+        "sequence_id": 0,
+        "command": "calibration",
+        "option": 2 // 2: Auto Bed Leveling
+                    // 8: Motor Noise Cancellation
+                    // 4: Vibration Compensation
+                    // 14: Full Calibration
     }
 }
 ```
