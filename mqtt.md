@@ -167,17 +167,6 @@ This is unnecessary for the X1 series since it already transmits the full object
 }
 ```
 
-```json
-{
-    "user_id": "0",
-    "pushing": {
-        "sequence_id": "0",
-        "version": 1,
-        "push_target": 1
-    }
-}
-```
-
 **Report**
 
 - Old Report
@@ -730,7 +719,7 @@ Set print auto recover from step loss
         "sequence_id": "0",
         "command": "print_option",
         "option": 0, // false: 0 or true: 1
-        "auto_recovery": false // false or true
+        "auto_recovery": false 
     }
 }
 ```
