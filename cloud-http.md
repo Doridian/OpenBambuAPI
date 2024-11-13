@@ -10,8 +10,7 @@ All requests (except to the token refresh endpoint) must be made by presenting a
 
 ## Login and get a token
 
-## POST https://bambulab.com/api/sign-in/form
-or **POST https://api.bambulab.com/v1/user-service/user/login**
+## POST https://api.bambulab.com/v1/user-service/user/login
 
 **Request**
 
@@ -25,17 +24,6 @@ Either login with password OR verification code, not both
 ```
 
 **Response**
-
-**FROM https://bambulab.com/api/sign-in/form**
-
-Here you grab the `set-cookie` headers, pull the `token` and `refreshToken` from the Cookie headers and use that for the API calls.
-
-The response data isn't needed at all, just included for clarity.
-```json
-{"tfaKey":""}
-```
-
-**FROM https://api.bambulab.com/v1/user-service/user/login**
 
 Here you grab the `token` and `refreshToken` from the body of the response. They're usually valid for a year.
 ```json
