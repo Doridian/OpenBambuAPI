@@ -18,7 +18,7 @@ Either login with password OR verification code, not both
 ```json
 {
     "account": "<EMAIL>",
-    "password":"<PASSWORD",
+    "password":"<PASSWORD>",
     "code": "<VERIFICATION-CODE>",
 }
 ```
