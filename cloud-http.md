@@ -10,24 +10,30 @@ All requests (except to the token refresh endpoint) must be made by presenting a
 
 ## Login and get a token
 
-## POST https://bambulab.com/api/sign-in/form
+## POST https://api.bambulab.com/v1/user-service/user/login
 
 **Request**
+
+Either login with password OR verification code, not both
 ```json
 {
     "account": "<EMAIL>",
     "password":"<PASSWORD",
-    "apiError":""
+    "code": "<VERIFICATION-CODE>",
 }
 ```
 
 **Response**
 
-Here you grab the `set-cookie` headers, pull the `token` and `refreshToken` from the Cookie headers and use that for the API calls.
-
-The response data isn't needed at all, just included for clarity.
+Here you grab the `token` and `refreshToken` from the body of the response. They're usually valid for a year.
 ```json
-{"tfaKey":""}
+{
+	"token": "[REMOVED]",
+	"refreshToken": "[REMOVED]",
+	"loginType": "", // if empty there should be token, if 'verifyCode' you'll need to use verification code to login
+	"expiresIn": 31536000, // 1 Year in seconds
+	... // and a few other umimportant stuff
+}
 ```
 
 ## Requests
@@ -108,9 +114,9 @@ Can take the optional query parameters `deviceId`, `after` and `limit`.
 			"status": 2,
 			"feedbackStatus": 0,
 			"startTime": "2022-11-22T01:58:10Z",
-			"endTime": "2022-11-22T02:54:12Z",
+			"endTime": "2022-11-22T02:54:12Z", // if endTime is within a minute of startTime, that means the file is currently printing
 			"weight": 12.6,
-			"costTime": 3348,
+			"costTime": 3348, // how long the print will take in seconds
 			"profileId": 0, // [REMOVED]
 			"plateIndex": 1,
 			"deviceId": "[REMOVED]",
