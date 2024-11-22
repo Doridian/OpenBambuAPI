@@ -25,14 +25,14 @@ Either login with password OR verification code, not both
 
 **Response**
 
-Here you grab the `token` and `refreshToken` from the body of the response. They're usually valid for a year.
+Here you grab the `accessToken` and `refreshToken` from the body of the response. They're usually valid for about 3 months.
 ```json
 {
-	"token": "[REMOVED]",
-	"refreshToken": "[REMOVED]",
+	"accessToken": "[REMOVED]",
+	"refreshToken": "[REMOVED]", // same as token
 	"loginType": "", // if empty there should be token, if 'verifyCode' you'll need to use verification code to login
-	"expiresIn": 31536000, // 1 Year in seconds
-	... // and a few other umimportant stuff
+	"expiresIn": 7776000, // ~ 3 Months in seconds
+	... // and a few other unimportant stuff
 }
 ```
 
@@ -154,6 +154,29 @@ Send a valid `refreshToken` and get new tokens with new expiration times.
 	"refreshToken": "[REMOVED]",
 	"expiresIn": 29501294,
 	"refreshExpiresIn": 29501294
+}
+```
+
+## GET /v1/design-user-service/my/preference
+
+Fetches your user account preferences and information. Also is a mirror for `https://makerworld.com/api/v1/design-user-service/my/preference`
+
+Useful for numeric `uid`, which when prefixed with `u_` acts as your cloud mqtt username, as this is no longer provided within access tokens.
+
+**Response**
+```json
+{
+    "uid": 0000000000, // [REMOVED]
+    "name": "name", // [REMOVED]
+    "handle": "handle", // [REMOVED]
+    "avatar": "url", // [REMOVED]
+    "bio": "",
+    "links": [
+        "url1", // [REMOVED]
+        "url2" // [REMOVED]
+    ],
+    "backgroundUrl": "url", // [REMOVED]
+    ... // various unimportant account settings and values, all 0 or 1 for values
 }
 ```
 
