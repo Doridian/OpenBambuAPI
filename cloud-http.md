@@ -138,6 +138,9 @@ Returns a ticket, probably means support tickets. Don't have any to test.
 
 ## POST /v1/user-service/user/refreshtoken
 
+> [!CAUTION]
+> This endpoint will only return 401 responses now. The refresh tokens are also equal to the access tokens in all known cases, and have the same validity as well. That makes this endpoint **practically useless**
+
 Send a valid `refreshToken` and get new tokens with new expiration times.
 
 **Request**
