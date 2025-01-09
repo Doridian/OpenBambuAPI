@@ -12,9 +12,10 @@ TLS: **yes**
 
 Authentication: **required**
 
-**Username:** `u_{USER_ID}`, where the user id can be grabbed by cracking your own `{ACCESS_TOKEN}` (which is a JWT) and reading its `preferred_username` field.
+**Username:** `u_{USER_ID}`, where the user id can be grabbed via [the GET /v1/design-user-service/my/preference
+ API](cloud-http.md#get-v1design-user-servicemypreference)
 
-**Password:** `{ACCESS_TOKEN}` (the entire JWT, no prefix or suffix)
+**Password:** `{ACCESS_TOKEN}` (the entire access token, no prefix or suffix)
 
 ## Local MQTT server
 
