@@ -809,9 +809,9 @@ Prints a "project"
 
 See basic structure
 
-## print.project_file
+## print.skip_objects
 
-Prints a "project"
+Skips object ids defined in slice_info.config
 
 **Request**
 ```json
@@ -819,7 +819,7 @@ Prints a "project"
   "print": {
     "sequence_id": "0",
     "command": "skip_objects",
-    "timestamp": "1738035141861" // Current Unix timestamp, seems to be optional. 
+    "timestamp": {unix_timestamp} // Current Unix timestamp, seems to be optional. 
     "obj_list": [ 
       206 // List of canceled object IDs. 
     ]
