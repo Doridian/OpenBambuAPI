@@ -809,6 +809,33 @@ Prints a "project"
 
 See basic structure
 
+## print.project_file
+
+Prints a "project"
+
+**Request**
+```json
+{
+  "print": {
+    "sequence_id": "0",
+    "command": "skip_objects",
+    "timestamp": "1738035141861" // Current Unix timestamp, seems to be optional. 
+    "obj_list": [ 
+      206 // List of canceled object IDs. 
+    ]
+  }
+}
+```
+
+**Report**
+
+Updates [`pushing.pushall`](#pushingpushall) with 
+```json
+"s_obj": [
+      {obj ids}
+    ],
+```
+
 ## system.ledctrl
 
 Controls the LEDs of the printer.
