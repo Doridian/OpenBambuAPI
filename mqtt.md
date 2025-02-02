@@ -31,6 +31,9 @@ Authentication: **required**
 
 Wildcard subscriptions with `#` possible
 
+> [!IMPORTANT]  
+> Check out the [TLS Certificates](tls.md) page for more information on how to securely connect.
+
 # Topics
 
 ## device/{DEVICE_ID}/report
