@@ -1,9 +1,23 @@
 # Basics
 
+## X1
+
+The X1 series printers run a RTSP server that streams video over the network.
+
+### Local RTSP Server
+
+- **URL**: `rtsps://{USERNAME}:{PASSWORD}@{PRINTER_IP}:322/streaming/live/1`
+- **TLS**: [yes](./tls.md)
+- **Authentication**: required
+- **Username**: `bblp`
+- **Password**: `dev_access_code` from a `Device` object (aka the LAN access code).
+
+## A1 and P1
+
 The A1 and P1 series printers run a simple TCP server that streams JPEG images over the network.
 Integers are encoded in little-endian byte order.
 
-## Local Video Stream Server
+### Local Video Server
 
 - **Host**: `{PRINTER_IP}:6000`
 - **TLS**: [yes](./tls.md)
@@ -11,7 +25,7 @@ Integers are encoded in little-endian byte order.
 - **Username**: `bblp`
 - **Password**: `dev_access_code` from a `Device` object (aka the LAN access code).
 
-## Authentication
+### Authentication
 
 This packet must be sent when connecting to the server.
 
@@ -24,7 +38,7 @@ This packet must be sent when connecting to the server.
 | 16     | 32 bytes | Username encoded as ASCII, right-padded with null bytes. |
 | 48     | 32 bytes | Password encoded as ASCII, right-padded with null bytes. |
 
-## Header
+### Header
 
 The server sends a 16-byte header for each frame.
 
@@ -35,7 +49,7 @@ The server sends a 16-byte header for each frame.
 | 8      | 4 bytes | 1            |
 | 12     | 4 bytes | 0            |
 
-## Image
+### Image
 
 After the header, the server sends a total of `payload size` bytes containing the JPEG image.
 
