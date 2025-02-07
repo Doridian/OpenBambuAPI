@@ -6,7 +6,7 @@ The X1 series printers run a RTSP server that streams video over the network.
 
 ### Local RTSP Server
 
-- **URL**: `rtsps://{USERNAME}:{PASSWORD}@{PRINTER_IP}:322/streaming/live/1`
+- **URL**: `rtsps://{PRINTER_IP}:322/streaming/live/1`
 - **TLS**: [yes](./tls.md)
 - **Authentication**: required
 - **Username**: `bblp`
