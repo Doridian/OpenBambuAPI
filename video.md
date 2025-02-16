@@ -14,7 +14,7 @@ The X1 series printers run a RTSP server that streams video over the network.
 
 ## A1 and P1
 
-The A1 and P1 series printers run a simple TCP server that streams JPEG images over the network.
+The A1 and P1 series printers run a simple TCP server that streams 1280x720 JPEG images over the network.
 Integers are encoded in little-endian byte order.
 
 ### Local Video Server
@@ -31,9 +31,9 @@ This packet must be sent when connecting to the server.
 
 | Offset | Size     | Value                                                    |
 | ------ | -------- | -------------------------------------------------------- |
-| 0      | 4 bytes  | 0x40                                                     |
-| 4      | 4 bytes  | 0x3000                                                   |
-| 8      | 4 bytes  | 0                                                        |
+| 0      | 4 bytes  | Inlined Payload size (0x40)                              |
+| 4      | 4 bytes  | Type (0x3000)                                            |
+| 8      | 4 bytes  | Flags (0)                                                |
 | 12     | 4 bytes  | 0                                                        |
 | 16     | 32 bytes | Username encoded as ASCII, right-padded with null bytes. |
 | 48     | 32 bytes | Password encoded as ASCII, right-padded with null bytes. |
@@ -45,8 +45,8 @@ The server sends a 16-byte header for each frame.
 | Offset | Size    | Value        |
 | ------ | ------- | ------------ |
 | 0      | 4 bytes | Payload size |
-| 4      | 4 bytes | 0            |
-| 8      | 4 bytes | 1            |
+| 4      | 4 bytes | itrack (0)   |
+| 8      | 4 bytes | Flags (1)    |
 | 12     | 4 bytes | 0            |
 
 ### Image
