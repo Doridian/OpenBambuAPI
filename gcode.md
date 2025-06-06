@@ -199,11 +199,13 @@ M400 is "Finish Moves". Marlin doesn't document any arguments. Bambu uses these:
 - `M620 C#` - calibrate AMS by AMS index
 - `M620 R#` - refresh AMS by tray index
 - `M620 P#` - select AMS tray by tray index
-- `M620 M` - Commented ";enable remap"; only done once before the first M620 command
-- `M620 S#` - Starts a branch; if "Enable AMS" is NOT checked, then gcode is skipped until the matching `M621 S#A` is found. Commented "select AMS by tray index".
-  - `#` = 255 when unloading filament at end of print. Is 255 just used because it's larger than number of filaments you should ever have?
+- `M620 M` - Commented ";enable remap"; only done once before the first M620 command.
+- `M620 S#` - Starts a branch; if "Enable AMS" is NOT checked, then gcode is skipped until the matching `M621 S#` is found. Commented "select AMS by tray index", but that likely refers to the whole block of commands and not this single command.
+  - Seems to only be used for unloading filament during machine_end_gcode since at least 20221103.
+  - `#` = 255 when unloading filament at end of print for non-H2D. It's just a constant that was in AMS code from the beginning.
+  - `#` = 65535 and 65279 are used during H2D unload. They are simply hardcoded in the machine end code. (65279 is 0x100 less than 65535)
 - `M620 S#A` - Starts a branch; if "Enable AMS" is NOT checked, then gcode is skipped until the matching `M621 S#A` is found.
-  - Not sure what the `A` does differently.
+  - Not sure what the `A` does differently. Used for filament change during print, and not for the final unload during machine end sequence.
   - Does being in this branch as an effect on `T` commands? The `T1000` falls outside a `M620` branch, but `T255` is within the matching one.
   - Does this branch if the intended filament is already loaded?
   - What happens if external filament is loaded?
