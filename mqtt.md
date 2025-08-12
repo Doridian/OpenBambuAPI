@@ -735,13 +735,21 @@ Starts calibration process.
 
 **Note:** Some printers might need `gcode_file` with `/usr/etc/print/auto_cali_for_user.gcode` instead!
 
+**Note:** The options parameter should be a bitmask like this:
+```
+ if (bedLevelling) bitmask |= 1 << 1;
+ if (vibrationCompensation) bitmask |= 1 << 2;
+ if (motorCancellation) bitmask |= 1 << 3;
+```
+
 **Request**
 
 ```json
 {
     "print": {
         "sequence_id": "0",
-        "command": "calibration"
+        "command": "calibration",
+        "option": 0,
     }
 }
 ```
