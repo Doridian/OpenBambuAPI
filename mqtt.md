@@ -735,13 +735,21 @@ Starts calibration process.
 
 **Note:** Some printers might need `gcode_file` with `/usr/etc/print/auto_cali_for_user.gcode` instead!
 
+**Note:** The options parameter should be a bitmask like this:
+```
+ if (bedLevelling) bitmask |= 1 << 1;
+ if (vibrationCompensation) bitmask |= 1 << 2;
+ if (motorCancellation) bitmask |= 1 << 3;
+```
+
 **Request**
 
 ```json
 {
     "print": {
         "sequence_id": "0",
-        "command": "calibration"
+        "command": "calibration",
+        "option": 0,
     }
 }
 ```
@@ -839,6 +847,26 @@ Updates [`pushing.pushall`](#pushingpushall) with
     ],
 ```
 
+## print.print_option
+
+Modifies the printer's settings.
+
+**Request**
+```json
+{
+  "print": {
+    "sequence_id": "0",
+    "command": "print_option",
+    "auto_recovery": true // can be "auto_recovery", "air_print_detect", "filament_tangle_detect", "nozzle_blob_detect", or "sound_enable"
+  }
+}
+
+```
+
+**Report**
+
+See basic structure
+
 ## system.ledctrl
 
 Controls the LEDs of the printer.
@@ -890,6 +918,22 @@ Gets the LAN access code of the printer
         "command": "get_access_code",
         "access_code": "{ACCESS_CODE}",
         "result": "success"
+    }
+}
+```
+
+## system.set_accessories.nozzle
+
+Update the nozzle type and diameter.
+
+```json
+{
+    "system": {
+        "sequence_id": "0",
+        "accessory_type": "nozzle",
+        "command": "set_accessories",
+        "nozzle_diameter": 0.4,
+        "nozzle_type": "stainless_steel" // "stainless_steel" or "hardened_steel"
     }
 }
 ```
@@ -946,7 +990,7 @@ Configures the XCam (camera AI features, including Micro LIDAR features).
     "xcam": {
         "sequence_id": "0",
         "command": "xcam_control_set",
-        "module_name": "first_layer_inspector", // "first_layer_inspector" or "spaghetti_detector"
+        "module_name": "first_layer_inspector", // "first_layer_inspector", "buildplate_marker_detector", "printing_monitor", "pileup_detector", "airprint_detector", "clump_detector", or "spaghetti_detector"
         "control": true, // Enable the module
         "print_halt": false // Cause the module to halt the print on error
     }
