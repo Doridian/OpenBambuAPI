@@ -914,6 +914,22 @@ Gets the LAN access code of the printer
 }
 ```
 
+## system.set_accessories.nozzle
+
+Update the nozzle type and diameter.
+
+```json
+{
+    "system": {
+        "sequence_id": "0",
+        "accessory_type": "nozzle",
+        "command": "set_accessories",
+        "nozzle_diameter": 0.4,
+        "nozzle_type": "stainless_steel" // "stainless_steel" or "hardened_steel"
+    }
+}
+```
+
 ## camera.ipcam_record_set
 
 Turns on or off creating a recording of prints.
