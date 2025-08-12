@@ -839,6 +839,26 @@ Updates [`pushing.pushall`](#pushingpushall) with
     ],
 ```
 
+## print.print_option
+
+Modifies the printer's settings.
+
+**Request**
+```json
+{
+  "print": {
+    "sequence_id": "0",
+    "command": "print_option",
+    "auto_recovery": true // can be "auto_recovery", "air_print_detect", "filament_tangle_detect", "nozzle_blob_detect", or "sound_enable"
+  }
+}
+
+```
+
+**Report**
+
+See basic structure
+
 ## system.ledctrl
 
 Controls the LEDs of the printer.
@@ -946,7 +966,7 @@ Configures the XCam (camera AI features, including Micro LIDAR features).
     "xcam": {
         "sequence_id": "0",
         "command": "xcam_control_set",
-        "module_name": "first_layer_inspector", // "first_layer_inspector" or "spaghetti_detector"
+        "module_name": "first_layer_inspector", // "first_layer_inspector", "buildplate_marker_detector", "printing_monitor", "pileup_detector", "airprint_detector", "clump_detector", or "spaghetti_detector"
         "control": true, // Enable the module
         "print_halt": false // Cause the module to halt the print on error
     }
