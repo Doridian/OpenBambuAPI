@@ -816,9 +816,65 @@ Prints a "project"
 }
 ```
 
+
+
 **Report**
 
 See basic structure
+
+
+## AMS Mapping Configuration (`ams_mapping`)
+
+### Overview
+
+The `ams_mapping` parameter is crucial for multi-color print jobs when using the AMS (Automatic Material System). It defines which AMS slot corresponds to each color in your print file.
+
+### Structure
+
+```json
+{
+  "print": {
+    "ams_mapping": [
+      -1,
+      -1,
+      -1,
+      1,
+      0
+    ],
+    // ... rest of print command
+  }
+}
+```
+
+### How AMS Mapping Works
+
+The `ams_mapping` array uses a **reverse indexing system** where:
+- **Array positions** represent color indices in your print file (starting from 0)
+- **Array values** represent AMS slot numbers (0-3 for typical 4-slot AMS)
+- **-1** indicates unused color slots
+
+#### Key Rules:
+1. **Fixed array length**: Always use 5 elements (supports up to 4 colors + padding)
+2. **Right-to-left assignment**: Color assignments fill from the end of the array
+3. **Pad with -1**: Fill unused positions at the beginning with -1
+
+
+| Colors Used | Array Pattern | Description |
+|----------|---------------|-------------|
+| 1 color     | `[-1, -1, -1, -1, X]` | Single color uses AMS slot X |
+| 2 colors    | `[-1, -1, -1, X, Y]` | Colors map to slots X and Y |
+| 3 colors    | `[-1, -1, X, Y, Z]` | Colors map to slots X, Y, and Z |
+| 4 colors    | `[-1, W, X, Y, Z]` | Colors map to slots W, X, Y, and Z |
+
+### Important Notes
+
+- **AMS slot numbers** are zero-indexed (0, 1, 2, 3)
+- **Color indices** in your print file start from 0
+- The printer will just pause and won't start if the mapping is not correct
+- Ensure the specified AMS slots contain the correct filament types and colors
+- Always set `"use_ams": true` when using AMS mapping
+- Verify your AMS is properly loaded before sending the print job
+---
 
 ## print.skip_objects
 
