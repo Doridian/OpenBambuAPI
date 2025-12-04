@@ -1,8 +1,8 @@
 # Basics
 
-## X1
+## X1 and P2S
 
-The X1 series printers run a RTSP server that streams video over the network.
+The X1 series and P2S printers run a RTSP server that streams video over the network.
 
 ### Local RTSP Server
 
