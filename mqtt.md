@@ -737,7 +737,7 @@ Starts calibration process.
 
 **Note:** The options parameter should be a bitmask like this:
 ```
- if (lidarCalibration) bitmask |= 1 ;
+ if (lidarCalibration) bitmask |= 1;
  if (bedLevelling) bitmask |= 1 << 1;
  if (vibrationCompensation) bitmask |= 1 << 2;
  if (motorCancellation) bitmask |= 1 << 3;
