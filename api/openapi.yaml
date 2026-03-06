@@ -4,7 +4,7 @@ info:
   description: |
     Reverse-engineered API specification for Bambu Lab cloud services.
     Captured from Bambu Handy app (bbl.intl.bambulab.com) via live traffic interception.
-    
+
     Covers 14 microservices including IoT, User, Design (MakerWorld), Comment, Search, and more.
     All endpoints require Bearer JWT authentication.
   version: 1.0.0-discovered
@@ -52,7 +52,7 @@ paths:
       summary: List bound printers
       description: Returns all printers bound to the authenticated user's account.
       responses:
-        '200':
+        "200":
           description: |
             ```json
             { "message": "success", "devices": [{ "dev_id": "...", "name": "...", "online": true, "print_status": "SUCCESS", "dev_model_name": "BL-P001", "dev_product_name": "X1 Carbon", "dev_access_code": "..." }] }
@@ -67,7 +67,7 @@ paths:
       summary: Generate TUTK connection code
       description: Generate a ThroughTek P2P connection code for camera/LAN access. Requires dev_id in request body.
       responses:
-        '200':
+        "200":
           description: TUTK connection credentials
           content:
             application/json:
@@ -82,13 +82,13 @@ paths:
           in: path
           required: true
           schema: { type: string }
-          example: '614790751'
+          example: "614790751"
         - name: model_id
           in: query
           schema: { type: string }
           example: USf86740b8413939
       responses:
-        '200':
+        "200":
           description: User printer profile with context, plates, materials
           content:
             application/json:
@@ -103,7 +103,7 @@ paths:
           required: true
           schema: { type: string }
       responses:
-        '200':
+        "200":
           description: Print task details
           content:
             application/json:
@@ -128,7 +128,7 @@ paths:
           schema: { type: string }
           description: AES-256 encrypted payload
       responses:
-        '200':
+        "200":
           description: X.509 certificate and private key
           content:
             application/json:
@@ -141,12 +141,12 @@ paths:
         - name: version
           in: query
           schema: { type: string }
-          example: '1.0.0.1'
+          example: "1.0.0.1"
         - name: public
           in: query
           schema: { type: boolean }
       responses:
-        '200':
+        "200":
           description: Print/printer/filament profile catalog
           content:
             application/json:
@@ -159,12 +159,12 @@ paths:
         - name: slicer/info/bbl
           in: query
           schema: { type: string }
-          example: '01.00.00.04'
+          example: "01.00.00.04"
         - name: slicer/settings/bbl
           in: query
           schema: { type: string }
       responses:
-        '200':
+        "200":
           description: Slicer resource bundle
           content:
             application/json:
@@ -180,7 +180,7 @@ paths:
           schema:
             type: integer
             enum: [1, 2, 3, 4, 5]
-          description: '1=system, 2=comments, 3=likes, 4=follows, 5=prints'
+          description: "1=system, 2=comments, 3=likes, 4=follows, 5=prints"
         - name: offset
           in: query
           schema: { type: integer, default: 0 }
@@ -188,7 +188,7 @@ paths:
           in: query
           schema: { type: integer, default: 20 }
       responses:
-        '200':
+        "200":
           description: Paginated messages (Elasticsearch-style hits array)
           content:
             application/json:
@@ -198,7 +198,7 @@ paths:
       tags: [user-service]
       summary: Get unread message count
       responses:
-        '200':
+        "200":
           description: Counts by category
           content:
             application/json:
@@ -208,7 +208,7 @@ paths:
       tags: [user-service]
       summary: Get latest message
       responses:
-        '200':
+        "200":
           description: Most recent message
           content:
             application/json:
@@ -218,13 +218,13 @@ paths:
       tags: [user-service]
       summary: Mark messages as read
       responses:
-        '200': { description: Success }
+        "200": { description: Success }
   /user-service/my/message/device/taskstatus:
     get:
       tags: [user-service]
       summary: Get device task notification status
       responses:
-        '200':
+        "200":
           description: Task status for badge counts
           content:
             application/json:
@@ -234,7 +234,7 @@ paths:
       tags: [user-service]
       summary: Mark device task notifications as read
       responses:
-        '200': { description: Success }
+        "200": { description: Success }
   /user-service/my/task/{taskId}:
     get:
       tags: [user-service]
@@ -245,7 +245,7 @@ paths:
           required: true
           schema: { type: string }
       responses:
-        '200':
+        "200":
           description: Task details
           content:
             application/json:
@@ -260,7 +260,7 @@ paths:
           required: true
           schema: { type: integer }
       responses:
-        '200':
+        "200":
           description: Printed plate info
           content:
             application/json:
@@ -277,7 +277,7 @@ paths:
           in: query
           schema: { type: string }
       responses:
-        '200':
+        "200":
           description: Model profile
           content:
             application/json:
@@ -287,13 +287,13 @@ paths:
       tags: [user-service]
       summary: Register push notification token
       responses:
-        '200': { description: Token registered }
+        "200": { description: Token registered }
   /user-service/latest/app:
     get:
       tags: [user-service]
       summary: Check for app updates
       responses:
-        '200':
+        "200":
           description: Latest version info
           content:
             application/json:
@@ -315,7 +315,7 @@ paths:
           in: query
           schema: { type: boolean }
       responses:
-        '200':
+        "200":
           description: Full design with instances, creator, tags, images
           content:
             application/json:
@@ -330,7 +330,7 @@ paths:
           required: true
           schema: { type: integer }
       responses:
-        '200':
+        "200":
           description: Remix list
           content:
             application/json:
@@ -345,7 +345,7 @@ paths:
           required: true
           schema: { type: integer }
       responses:
-        '200': { description: Like toggled }
+        "200": { description: Like toggled }
   /design-service/instance/{instanceId}/f3mf:
     get:
       tags: [design-service]
@@ -360,7 +360,7 @@ paths:
           required: true
           schema: { type: string, enum: [preview, download] }
       responses:
-        '200': { description: 3MF file (binary for download, JSON for preview) }
+        "200": { description: 3MF file (binary for download, JSON for preview) }
   /design-service/favorites/designs/{userId}:
     get:
       tags: [design-service]
@@ -377,7 +377,7 @@ paths:
           in: query
           schema: { type: integer }
       responses:
-        '200':
+        "200":
           description: Favorited designs
           content:
             application/json:
@@ -391,7 +391,7 @@ paths:
           in: query
           schema: { type: integer }
       responses:
-        '200':
+        "200":
           description: Favorites status
           content:
             application/json:
@@ -408,7 +408,7 @@ paths:
           in: query
           schema: { type: integer }
       responses:
-        '200':
+        "200":
           description: Liked designs
           content:
             application/json:
@@ -418,7 +418,7 @@ paths:
       tags: [design-service]
       summary: Get favorite design IDs (lightweight)
       responses:
-        '200':
+        "200":
           description: Array of design IDs only
           content:
             application/json:
@@ -428,7 +428,7 @@ paths:
       tags: [design-service]
       summary: Get drafts with slice errors
       responses:
-        '200':
+        "200":
           description: Draft designs with slicing errors
           content:
             application/json:
@@ -441,7 +441,7 @@ paths:
         Get list of active and past design contests on MakerWorld.
         Discovered via apkre dynamic capture (March 2026).
       responses:
-        '200':
+        "200":
           description: Contest list
           content:
             application/json:
@@ -456,7 +456,7 @@ paths:
           schema: { type: boolean }
           description: true for non-cached response
       responses:
-        '200':
+        "200":
           description: User profile
           content:
             application/json:
@@ -467,7 +467,7 @@ paths:
       summary: Get user preferences
       description: Also documented in cloud-http.md. Returns uid, name, handle, avatar, settings.
       responses:
-        '200':
+        "200":
           description: User preferences
           content:
             application/json:
@@ -477,7 +477,7 @@ paths:
       tags: [design-user-service]
       summary: Get mutual follows
       responses:
-        '200':
+        "200":
           description: Mutual follow list
           content:
             application/json:
@@ -491,9 +491,9 @@ paths:
           in: query
           required: true
           schema: { type: integer, enum: [0, 6] }
-          description: '0=general, 6=upload'
+          description: "0=general, 6=upload"
       responses:
-        '200':
+        "200":
           description: Permission status
           content:
             application/json:
@@ -516,10 +516,10 @@ paths:
         - name: acceptTypes
           in: query
           schema: { type: string }
-          description: '0=model, 2=remix, 3=article, 5=collection, 6=tutorial'
-          example: '0,2,5,6,3'
+          description: "0=model, 2=remix, 3=article, 5=collection, 6=tutorial"
+          example: "0,2,5,6,3"
       responses:
-        '200':
+        "200":
           description: Recommended designs
           content:
             application/json:
@@ -545,9 +545,9 @@ paths:
         - name: sort
           in: query
           schema: { type: integer, default: 0 }
-          description: '0=newest'
+          description: "0=newest"
       responses:
-        '200':
+        "200":
           description: Comments and ratings
           content:
             application/json:
@@ -562,7 +562,7 @@ paths:
           required: true
           schema: { type: integer }
       responses:
-        '200':
+        "200":
           description: Comment details
           content:
             application/json:
@@ -584,7 +584,7 @@ paths:
           schema: { type: integer }
           description: Reply ID cursor
       responses:
-        '200':
+        "200":
           description: Replies
           content:
             application/json:
@@ -598,7 +598,7 @@ paths:
           required: true
           schema: { type: integer }
       responses:
-        '200': { description: Reply created }
+        "200": { description: Reply created }
   /comment-service/comment/{commentId}/like:
     post:
       tags: [comment-service]
@@ -609,7 +609,7 @@ paths:
           required: true
           schema: { type: integer }
       responses:
-        '200': { description: Like toggled }
+        "200": { description: Like toggled }
   /comment-service/rating/inst/{instanceId}:
     get:
       tags: [comment-service]
@@ -620,7 +620,7 @@ paths:
           required: true
           schema: { type: integer }
       responses:
-        '200':
+        "200":
           description: Rating data
           content:
             application/json:
@@ -639,7 +639,7 @@ paths:
         - name: projectScope
           in: query
           schema: { type: integer }
-          description: '0=general, 2=MakerWorld'
+          description: "0=general, 2=MakerWorld"
         - name: offset
           in: query
           schema: { type: integer }
@@ -647,7 +647,7 @@ paths:
           in: query
           schema: { type: integer }
       responses:
-        '200':
+        "200":
           description: Message sessions
           content:
             application/json:
@@ -657,7 +657,7 @@ paths:
       tags: [search-service]
       summary: Get homepage navigation
       responses:
-        '200':
+        "200":
           description: Navigation categories and sections
           content:
             application/json:
@@ -668,7 +668,7 @@ paths:
       summary: Get recommended designs
       description: 'Note: API typo — "recommand" not "recommend"'
       responses:
-        '200':
+        "200":
           description: Recommended designs
           content:
             application/json:
@@ -682,7 +682,7 @@ paths:
           in: query
           required: true
           schema: { type: string }
-          description: 'Trending, category_400 (Toys), category_800 (Home)'
+          description: "Trending, category_400 (Toys), category_800 (Home)"
         - name: offset
           in: query
           schema: { type: integer }
@@ -690,7 +690,7 @@ paths:
           in: query
           schema: { type: integer, default: 20 }
       responses:
-        '200':
+        "200":
           description: Designs in category
           content:
             application/json:
@@ -714,7 +714,7 @@ paths:
           in: query
           schema: { type: integer, default: 20 }
       responses:
-        '200':
+        "200":
           description: Designs in category
           content:
             application/json:
@@ -727,7 +727,7 @@ paths:
         Search service configuration including category definitions, filter options, and sort parameters.
         Discovered via apkre dynamic capture (March 2026).
       responses:
-        '200':
+        "200":
           description: Search configuration
           content:
             application/json:
@@ -750,9 +750,9 @@ paths:
         - name: scene
           in: query
           schema: { type: integer }
-          description: '1=similar'
+          description: "1=similar"
       responses:
-        '200':
+        "200":
           description: Related designs
           content:
             application/json:
@@ -762,7 +762,7 @@ paths:
       tags: [operation-service]
       summary: Get app homepage config
       responses:
-        '200':
+        "200":
           description: Banners, featured content, section ordering
           content:
             application/json:
@@ -773,7 +773,7 @@ paths:
       summary: Get app configuration
       description: Feature flags, URLs, global settings
       responses:
-        '200':
+        "200":
           description: App configuration
           content:
             application/json:
@@ -793,7 +793,7 @@ paths:
           schema: { type: integer }
           example: 133
       responses:
-        '200':
+        "200":
           description: Contest details
           content:
             application/json:
@@ -806,7 +806,7 @@ paths:
         Get designs submitted by the current user to contests.
         Discovered via apkre dynamic capture (March 2026).
       responses:
-        '200':
+        "200":
           description: User contest entries
           content:
             application/json:
@@ -816,7 +816,7 @@ paths:
       tags: [aftersale-service]
       summary: Get unread trouble ticket count
       responses:
-        '200':
+        "200":
           description: Unread count
           content:
             application/json:
@@ -826,7 +826,7 @@ paths:
       tags: [aftersale-service]
       summary: Get unread MakerWorld support count
       responses:
-        '200':
+        "200":
           description: Unread count
           content:
             application/json:
@@ -841,7 +841,7 @@ paths:
           required: true
           schema: { type: integer }
       responses:
-        '200':
+        "200":
           description: Boost status
           content:
             application/json:
@@ -856,7 +856,7 @@ paths:
           schema: { type: string }
           example: message
       responses:
-        '200':
+        "200":
           description: Classification options for moderation
           content:
             application/json:
@@ -871,8 +871,231 @@ paths:
           schema: { type: string }
           example: app_newbie_task_v2,app_newbie_task_v3
       responses:
-        '200':
+        "200":
           description: Task statuses
+          content:
+            application/json:
+              schema: { type: object }
+  /user-service/user/login:
+    post:
+      tags: [user-service]
+      summary: Login and get access token
+      description: |
+        Authenticate with email + password or verification code.
+        Returns accessToken (JWT, valid ~3 months) and refreshToken.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                account: { type: string, description: Email address }
+                password:
+                  { type: string, description: Password (use this OR code) }
+                code:
+                  {
+                    type: string,
+                    description: Verification code (use this OR password),
+                  }
+      responses:
+        "200":
+          description: |
+            ```json
+            { "accessToken": "...", "refreshToken": "...", "loginType": "", "expiresIn": 7776000 }
+            ```
+          content:
+            application/json:
+              schema: { type: object }
+  /user-service/user/refreshtoken:
+    post:
+      tags: [user-service]
+      summary: Refresh access token (deprecated)
+      description: |
+        Returns 401 in all known cases. Refresh tokens equal access tokens
+        with the same validity, making this endpoint practically useless.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken: { type: string }
+      responses:
+        "200":
+          description: New tokens
+          content:
+            application/json:
+              schema: { type: object }
+        "401":
+          description: Always returns 401 (endpoint deprecated)
+  /user-service/my/tasks:
+    get:
+      tags: [user-service]
+      summary: Get print task history
+      description: Returns list of print tasks (Elasticsearch-style response).
+      parameters:
+        - name: deviceId
+          in: query
+          schema: { type: string }
+        - name: after
+          in: query
+          schema: { type: string }
+        - name: limit
+          in: query
+          schema: { type: integer }
+      responses:
+        "200":
+          description: |
+            ```json
+            { "total": 5, "hits": [{ "id": 0, "designId": 0, "title": "...", "status": 2, "startTime": "...", "endTime": "...", "weight": 12.6, "costTime": 3348, "deviceId": "...", "mode": "cloud_file" }] }
+            ```
+          content:
+            application/json:
+              schema: { type: object }
+  /user-service/my/task:
+    post:
+      tags: [user-service]
+      summary: Create a print task
+      description: Creates a task. Expects a task object in the request body.
+      responses:
+        "200": { description: Task created }
+  /user-service/my/ticket/{ticketId}:
+    get:
+      tags: [user-service]
+      summary: Get support ticket
+      parameters:
+        - name: ticketId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Ticket details
+          content:
+            application/json:
+              schema: { type: object }
+  /iot-service/api/user/device/info:
+    patch:
+      tags: [iot-service]
+      summary: Update device info
+      description: Update device properties (e.g., name).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                dev_id: { type: string }
+      responses:
+        "200":
+          description: |
+            ```json
+            { "message": "success", "code": null, "error": null }
+            ```
+          content:
+            application/json:
+              schema: { type: object }
+  /iot-service/api/user/device/version:
+    get:
+      tags: [iot-service]
+      summary: Get device firmware version
+      description: Queries firmware version and available updates for a device.
+      parameters:
+        - name: dev_id
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Firmware version and update info
+          content:
+            application/json:
+              schema: { type: object }
+  /iot-service/api/user/notification:
+    get:
+      tags: [iot-service]
+      summary: Get upload/mesh notification
+      parameters:
+        - name: action
+          in: query
+          required: true
+          schema: { type: string, enum: [upload, import_mesh] }
+        - name: ticket
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Notification details
+          content:
+            application/json:
+              schema: { type: object }
+  /iot-service/api/user/print:
+    get:
+      tags: [iot-service]
+      summary: Get current printer status
+      description: Returns current status of all printers. Slicer always sets force=true.
+      parameters:
+        - name: force
+          in: query
+          schema: { type: boolean }
+      responses:
+        "200":
+          description: |
+            ```json
+            { "message": "success", "devices": [{ "dev_id": "...", "dev_name": "...", "dev_online": true, "task_id": null, "task_status": null, "progress": null }] }
+            ```
+          content:
+            application/json:
+              schema: { type: object }
+  /iot-service/api/user/project:
+    get:
+      tags: [iot-service]
+      summary: List user projects
+      description: Returns all projects for the current user.
+      responses:
+        "200":
+          description: |
+            ```json
+            { "message": "success", "projects": [{ "project_id": "...", "name": "...", "status": "ACTIVE", "create_time": "..." }] }
+            ```
+          content:
+            application/json:
+              schema: { type: object }
+  /iot-service/api/user/project/{projectId}:
+    get:
+      tags: [iot-service]
+      summary: Get project details
+      description: Full project details including profiles, plates, materials, and upload URLs.
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Full project with profiles, plates, materials
+          content:
+            application/json:
+              schema: { type: object }
+  /iot-service/api/slicer/setting/{settingId}:
+    get:
+      tags: [iot-service]
+      summary: Get slicer setting by ID
+      description: Gets the full data of a slicer setting (print/printer/filament profile).
+      parameters:
+        - name: settingId
+          in: path
+          required: true
+          schema: { type: string }
+          example: GP001
+      responses:
+        "200":
+          description: Full slicer setting with all parameters
           content:
             application/json:
               schema: { type: object }
@@ -885,7 +1108,7 @@ paths:
           in: query
           schema: { type: string, format: uuid }
       responses:
-        '200':
+        "200":
           description: Analytics tags
           content:
             application/json:
