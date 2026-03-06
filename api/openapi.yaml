@@ -24,7 +24,7 @@ tags:
   - name: user-service
     description: User messages, notifications, tasks, device tokens
   - name: design-service
-    description: 3D model designs, favorites, downloads (MakerWorld)
+    description: 3D model designs, favorites, downloads, contests (MakerWorld)
   - name: design-user-service
     description: User profile, preferences, follows, permissions
   - name: design-recommend-service
@@ -34,7 +34,7 @@ tags:
   - name: search-service
     description: Design search, navigation, trending, related content
   - name: operation-service
-    description: App configuration, homepage content
+    description: App configuration, homepage content, contests
   - name: aftersale-service
     description: Support tickets, unread counts
   - name: point-service
@@ -433,6 +433,19 @@ paths:
           content:
             application/json:
               schema: { type: object }
+  /design-service/contest/list:
+    get:
+      tags: [design-service]
+      summary: List contests
+      description: |
+        Get list of active and past design contests on MakerWorld.
+        Discovered via apkre dynamic capture (March 2026).
+      responses:
+        '200':
+          description: Contest list
+          content:
+            application/json:
+              schema: { type: object }
   /design-user-service/my/profile:
     get:
       tags: [design-user-service]
@@ -682,6 +695,43 @@ paths:
           content:
             application/json:
               schema: { type: object }
+  /search-service/select/design2:
+    get:
+      tags: [search-service]
+      summary: Browse designs v2
+      description: |
+        Updated design browsing endpoint (v2 of select/design/nav).
+        Discovered via apkre dynamic capture (March 2026).
+      parameters:
+        - name: navKey
+          in: query
+          schema: { type: string }
+          description: Category key (Trending, category_400, etc.)
+        - name: offset
+          in: query
+          schema: { type: integer }
+        - name: limit
+          in: query
+          schema: { type: integer, default: 20 }
+      responses:
+        '200':
+          description: Designs in category
+          content:
+            application/json:
+              schema: { type: object }
+  /search-service/cfg2:
+    get:
+      tags: [search-service]
+      summary: Get search configuration v2
+      description: |
+        Search service configuration including category definitions, filter options, and sort parameters.
+        Discovered via apkre dynamic capture (March 2026).
+      responses:
+        '200':
+          description: Search configuration
+          content:
+            application/json:
+              schema: { type: object }
   /search-service/design/{designId}/relate:
     get:
       tags: [search-service]
@@ -725,6 +775,39 @@ paths:
       responses:
         '200':
           description: App configuration
+          content:
+            application/json:
+              schema: { type: object }
+  /operation-service/contest/{contestId}:
+    get:
+      tags: [operation-service]
+      summary: Get contest details
+      description: |
+        Get details for a specific contest by ID. Includes rules, schedule,
+        entry requirements, and prize information.
+        Discovered via apkre dynamic capture (March 2026).
+      parameters:
+        - name: contestId
+          in: path
+          required: true
+          schema: { type: integer }
+          example: 133
+      responses:
+        '200':
+          description: Contest details
+          content:
+            application/json:
+              schema: { type: object }
+  /operation-service/userContestDesign:
+    get:
+      tags: [operation-service]
+      summary: Get user's contest entries
+      description: |
+        Get designs submitted by the current user to contests.
+        Discovered via apkre dynamic capture (March 2026).
+      responses:
+        '200':
+          description: User contest entries
           content:
             application/json:
               schema: { type: object }
