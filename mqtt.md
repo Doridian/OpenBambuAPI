@@ -600,7 +600,7 @@ TODO
 
 Read RFID info
 
-**Tequest**
+**Request**
 
 ```json
 {
