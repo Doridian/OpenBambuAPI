@@ -596,6 +596,38 @@ Tells printer to perform a filament change using AMS.
 
 TODO
 
+## print.ams_get_rfid
+
+Read RFID info
+
+**Request**
+
+```json
+{
+    "print": {
+        "sequenceId": "0",
+        "command": "ams_get_rfid",
+        "ams_id": 0, // Index of the AMS
+        "slot_id": 0 // Index of the Tray
+    }
+}
+```
+
+**Report**
+
+```json
+{
+    "print": {
+        "sequenceId": "0",
+        "command": "ams_get_rfid",
+        "result": "success",
+        "reason": "success",
+        "ams_id": 0,
+        "slot_id": 0
+    }
+}
+```
+
 ## print.ams_user_setting
 
 Changes the AMS settings of the given unit.
