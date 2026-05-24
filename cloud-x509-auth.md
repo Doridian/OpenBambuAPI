@@ -14,19 +14,23 @@ See also: [Hackaday: X.509 Certificate and Private Key Extracted](https://hackad
 ### 1. Request Device Certificate
 
 ```
-GET /v1/iot-service/api/user/applications/{appToken}/cert?aes256={encrypted}
+GET /v1/iot-service/api/user/applications/{appToken}/cert?aes256={encrypted}&ver=1
 ```
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `appToken` | path | Base64url-encoded application token (generated client-side) |
 | `aes256` | query | AES-256 encrypted payload containing device identity |
+| `ver` | query | Endpoint version selector; observed value is `1` |
 
 The app token is a long base64url string (100+ chars). The AES payload is similarly encoded.
 
+Recent slicer builds are observed to always include `&ver=1` as an
+additional query parameter; the endpoint appears to require it.
+
 **Example URL (tokens redacted):**
 ```
-https://api.bambulab.com/v1/iot-service/api/user/applications/QqTHQ6X9gFy9...=/cert?aes256=ViXLbxLlpySi...
+https://api.bambulab.com/v1/iot-service/api/user/applications/QqTHQ6X9gFy9...=/cert?aes256=ViXLbxLlpySi...&ver=1
 ```
 
 **Response:** X.509 certificate and private key for the specific printer.
