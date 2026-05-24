@@ -119,6 +119,39 @@ The `sign_string` is computed by:
 2. Signing with RSA-SHA256 using the private key from the certificate exchange
 3. Base64-encoding the signature
 
+## Per-Printer Client Certificates
+
+> The notes below are from observing a slicer talk to a single printer over LAN MQTT; some of this may be incomplete or wrong for other firmware tracks. Happy to be corrected.
+
+The cert returned by the `/cert` endpoint above is a per-printer client certificate. From what I can tell:
+
+- The leaf has `CN=<printer serial>` and chains up to BBL CA (the same chain bundled in [`examples/ca_cert.pem`](./examples/ca_cert.pem)).
+- It appears to be long-lived (the leaves I've looked at have ~10-year validity windows).
+- The printer firmware appears to accept any client cert that chains to BBL CA and whose CN matches its own serial; I haven't found other constraints.
+
+A given slicer install ends up holding one such cert+key per printer it has been bound to.
+
+### Where it's used
+
+The cert+key is presented during the TLS handshake to the printer's MQTT broker (`mqtts://<printer-ip>:8883`). It is *separate* from the `bblp` / LAN access code username+password, which is checked after the TLS handshake completes.
+
+### Auth requirements per command class
+
+For local MQTT, the cert+key on the TLS handshake is one layer; the `header`-signed envelope described above is a second layer that only some command classes require. Best guess from the traffic I've captured:
+
+| Top-level JSON key | TLS client cert+key | Signed envelope (`header`) | Firmware response if envelope missing/bad |
+|---|---|---|---|
+| `pushing.*` / `info.*` | Required to subscribe to `/report`; publish accepted with cert+key alone | No | n/a |
+| `system.*` / `camera.*` / `xcam.*` | Required (broker rejects the TLS handshake otherwise) | No | n/a |
+| `print.*` (publish to `/request`) | Required | Required | `result:"failed"`, `reason:"mqtt message verify failed"`, `err_code:0x05024007` if no envelope; `0x05024009` if envelope is present but malformed |
+| `print.*` (subscribe via `/report`) | Required | n/a | n/a |
+
+The two `err_code` values above seem to be firmware-defined and are easy to misattribute to credential or topic-ACL problems, so they're probably worth knowing about when implementing a client.
+
+### Obtaining the cert+key for testing
+
+If you have your own slicer install bound to your own printer, the per-printer cert+key can be recovered without modifying the slicer or its plugin: after the slicer has connected to the printer at least once, the leaf cert and private key live in the network plugin process's heap in PEM form, and can be recovered by scanning anonymous-memory regions of `/proc/<pid>/mem` for `-----BEGIN CERTIFICATE-----` and `-----BEGIN PRIVATE KEY-----` markers (ptrace is sufficient; no plugin patching required). This is the user-facing extraction route I'm aware of; there may be cleaner ones.
+
 ## Additional MQTT Commands Observed
 
 ### extrusion_cali_sel
