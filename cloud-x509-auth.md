@@ -101,7 +101,7 @@ The `cert_id` format is:
 ```
 
 Where:
-- `hex_fingerprint` is a 32-char lowercase hex string. In the envelopes I
+- `hex_fingerprint` is a 32-char lowercase hex string. In captured envelopes
   captured this matched the leaf certificate's
   `tbsCertificate.serialNumber` rather than an MD5 over the cert. You can
   check against your own capture with:
