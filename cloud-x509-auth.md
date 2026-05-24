@@ -101,7 +101,16 @@ The `cert_id` format is:
 ```
 
 Where:
-- `hex_fingerprint` is a 32-char hex string (MD5 of the certificate)
+- `hex_fingerprint` is a 32-char lowercase hex string. In the envelopes I
+  captured this matched the leaf certificate's
+  `tbsCertificate.serialNumber` rather than an MD5 over the cert. You can
+  check against your own capture with:
+
+  ```sh
+  # leaf.pem = the cert the client presented for this session
+  openssl x509 -in leaf.pem -serial -noout
+  # → the hex value should match the cert_id prefix (before any CN= suffix)
+  ```
 - `serialNumber` is the printer's serial number (e.g., `GLOF3813734089`)
 
 ## Signing Details
