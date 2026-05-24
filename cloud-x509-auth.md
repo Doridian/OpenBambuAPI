@@ -128,6 +128,79 @@ The `sign_string` is computed by:
 2. Signing with RSA-SHA256 using the private key from the certificate exchange
 3. Base64-encoding the signature
 
+## Envelope Construction
+
+The notes below cover the exact construction used to build a `header`
+envelope that the firmware accepts, so an independent client can
+produce byte-identical envelopes. The shape was deterministic across
+multiple captured envelopes from different slicer sessions.
+
+### Header field semantics
+
+| Field | Value type | Derivation |
+|---|---|---|
+| `sign_ver` | string | `"v1.0"` (only value observed) |
+| `sign_alg` | string | `"RSA_SHA256"` (RSA PKCS#1 v1.5 padding, SHA-256 digest) |
+| `cert_id` | string | leaf certificate's `tbsCertificate.serialNumber` as a lowercase 32-char hex string, optionally suffixed with `CN=<leaf-host>` (see "Certificate ID Format" above) |
+| `payload_len` | integer | byte length of the canonical bytes-to-sign described below |
+| `sign_string` | string | base64 of the RSA-SHA256 signature over the canonical bytes-to-sign |
+
+### Canonical bytes-to-sign
+
+The signing input is reconstructed from the top-level command class
+(only `print` has been observed to require signing, per the auth
+requirements table further down) and a canonicalised JSON
+serialisation of the inner object:
+
+```
+bytes_to_sign = '{"<top-key>":' + canonical_json(envelope[<top-key>]) + '}'
+```
+
+where `canonical_json()` is JSON serialised with:
+
+- keys sorted alphabetically (recursively, at every depth)
+- no whitespace anywhere
+- `,` and `:` as the only separators
+
+In Python this matches:
+
+```python
+json.dumps(payload, sort_keys=True, separators=(",", ":"))
+```
+
+`payload_len` is then the byte length of the resulting `bytes_to_sign`
+string (UTF-8 / ASCII, since the canonical form contains no
+non-ASCII bytes for any observed envelope).
+
+### Verification recipe
+
+The construction can be verified end-to-end against a captured envelope
+and the corresponding leaf certificate (selected via the `cert_id`
+prefix):
+
+```python
+import base64, json
+from cryptography.hazmat.primitives.asymmetric.padding import PKCS1v15
+from cryptography.hazmat.primitives.hashes import SHA256
+from cryptography.x509 import load_pem_x509_certificate
+
+env = json.load(open("envelope.json"))
+cert = load_pem_x509_certificate(open("leaf.pem", "rb").read())
+pubkey = cert.public_key()
+
+canonical_inner = json.dumps(env["print"], sort_keys=True,
+                             separators=(",", ":"))
+to_sign = b'{"print":' + canonical_inner.encode() + b"}"
+
+assert len(to_sign) == env["header"]["payload_len"]
+sig = base64.b64decode(env["header"]["sign_string"])
+pubkey.verify(sig, to_sign, PKCS1v15(), SHA256())
+print("Signature verified.")
+```
+
+Corrections welcome if the canonicalisation differs for other
+command classes or firmware tracks not yet captured.
+
 ## Per-Printer Client Certificates
 
 > The notes below are from observing a slicer talk to a single printer over LAN MQTT; some of this may be incomplete or wrong for other firmware tracks. Contributions / corrections are always welcome.
