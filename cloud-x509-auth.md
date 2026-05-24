@@ -121,10 +121,9 @@ The `sign_string` is computed by:
 
 ## Per-Printer Client Certificates
 
-> The notes below are from observing a slicer talk to a single printer over LAN MQTT; some of this may be incomplete or wrong for other firmware tracks. Happy to be corrected.
+> The notes below are from observing a slicer talk to a single printer over LAN MQTT; some of this may be incomplete or wrong for other firmware tracks. Contributions / corrections are always welcome.
 
-The cert returned by the `/cert` endpoint above is a per-printer client certificate. From what I can tell:
-
+The cert returned by the `/cert` endpoint above is a per-printer client certificate. Observations about the certificate:
 - The leaf has `CN=<printer serial>` and chains up to BBL CA (the same chain bundled in [`examples/ca_cert.pem`](./examples/ca_cert.pem)).
 - It appears to be long-lived (the leaves I've looked at have ~10-year validity windows).
 - The printer firmware appears to accept any client cert that chains to BBL CA and whose CN matches its own serial; I haven't found other constraints.
@@ -137,7 +136,7 @@ The cert+key is presented during the TLS handshake to the printer's MQTT broker 
 
 ### Auth requirements per command class
 
-For local MQTT, the cert+key on the TLS handshake is one layer; the `header`-signed envelope described above is a second layer that only some command classes require. Best guess from the traffic I've captured:
+For local MQTT, the cert+key on the TLS handshake is one layer; the `header`-signed envelope described above is a second layer that only some command classes require. Best guess from captured slicer traffic:
 
 | Top-level JSON key | TLS client cert+key | Signed envelope (`header`) | Firmware response if envelope missing/bad |
 |---|---|---|---|
@@ -150,7 +149,7 @@ The two `err_code` values above seem to be firmware-defined and are easy to misa
 
 ### Obtaining the cert+key for testing
 
-If you have your own slicer install bound to your own printer, the per-printer cert+key can be recovered without modifying the slicer or its plugin: after the slicer has connected to the printer at least once, the leaf cert and private key live in the network plugin process's heap in PEM form, and can be recovered by scanning anonymous-memory regions of `/proc/<pid>/mem` for `-----BEGIN CERTIFICATE-----` and `-----BEGIN PRIVATE KEY-----` markers (ptrace is sufficient; no plugin patching required). This is the user-facing extraction route I'm aware of; there may be cleaner ones.
+If you have your own slicer install bound to your own printer, the per-printer cert+key can be recovered without modifying the slicer or its plugin: after the slicer has connected to the printer at least once, the leaf cert and private key live in the network plugin process's heap in PEM form, and can be recovered by scanning anonymous-memory regions of `/proc/<pid>/mem` for `-----BEGIN CERTIFICATE-----` and `-----BEGIN PRIVATE KEY-----` markers (ptrace is sufficient; no plugin patching required). This is the currently known user-facing extraction method. If others are found, PRs welcome!
 
 ## Additional MQTT Commands Observed
 
