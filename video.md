@@ -12,6 +12,29 @@ The X1 series and P2S printers run a RTSP server that streams video over the net
 - **Username**: `bblp`
 - **Password**: `dev_access_code` from a `Device` object (aka the LAN access code).
 
+## H2 series
+
+H2S and H2D printers also serve the same `rtsps://{PRINTER_IP}:322/streaming/live/1`
+RTSPS feed, but on the firmwares observed (H2S `01.02.00.00`, H2D
+`01.02.00.00`) the LAN-RTSPS server appears to be **off by default**:
+port 322 closes the TCP connection immediately and the printer's
+`push_status` reports `ipcam.rtsp_url = "disable"`.
+
+To enable it, on the printer's touchscreen:
+
+1. Settings → General → LAN Mode Liveview (label varies by firmware track)
+2. Toggle "LAN Only Liveview" / "Local RTSP Stream" to on.
+
+After the toggle, `push_status` reports `ipcam.rtsp_url =
+"rtsps://{PRINTER_IP}:322/streaming/live/1"` and the port begins
+accepting connections. The same `bblp` + `dev_access_code` credentials
+apply.
+
+If the local toggle is left off, the printer is still reachable via
+the proprietary cloud-relay transports (TUTK / Agora P2P) and the
+slicer's MediaPlayCtrl path falls through to those automatically; only
+the direct `rtsps://` URL is gated.
+
 ## A1 and P1
 
 The A1 and P1 series printers run a simple TCP server that streams 1280x720 JPEG images over the network.
