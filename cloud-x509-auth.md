@@ -237,6 +237,67 @@ The two `err_code` values above seem to be firmware-defined and are easy to misa
 
 If you have your own slicer install bound to your own printer, the per-printer cert+key can be recovered without modifying the slicer or its plugin: after the slicer has connected to the printer at least once, the leaf cert and private key live in the network plugin process's heap in PEM form, and can be recovered by scanning anonymous-memory regions of `/proc/<pid>/mem` for `-----BEGIN CERTIFICATE-----` and `-----BEGIN PRIVATE KEY-----` markers (ptrace is sufficient; no plugin patching required). This is the currently known user-facing extraction method. If others are found, PRs welcome!
 
+## Inner `param_enc` transform (gcode_line only)
+
+For `print.command = "gcode_line"` payloads, the network plugin appears to
+apply an additional transform **before** the outer envelope above is
+built and signed: the plaintext `param` field is removed and replaced
+with `param_enc`, whose value is the original gcode string RSA-encrypted
+with the **printer's** RSA public key (distinct from the per-slicer
+client certificate's keypair used for the outer signature). The
+resulting JSON is then run through the canonical-bytes-to-sign
+computation and signed as usual.
+
+Schematically:
+
+```jsonc
+// what an application produces
+{
+  "print": {
+    "command": "gcode_line",
+    "param": "M1002 set_gcode_claim_speed_level: 5\n",
+    "sequence_id": "1234"
+  }
+}
+
+// what is actually published to MQTT
+{
+  "print": {
+    "command": "gcode_line",
+    "param_enc": "<base64 of RSA-encrypted bytes of the param string>",
+    "sequence_id": "1234"
+  },
+  "header": { /* sign_string covers the param_enc form */ }
+}
+```
+
+Properties observed in captures (P1S / H2S firmwares; not exhaustively
+re-checked against every printer model):
+
+- The same plaintext `param` yields a different `param_enc` value each
+  publish — consistent with PKCS#1 v1.5 padding (random padding bytes).
+- The transform applies only to `gcode_line`. Other `print.*` payloads
+  (`gcode_file`, `pause`, `resume`, `stop`, `print_speed`, …) keep
+  their fields verbatim and rely on the outer signature alone.
+- The encryption key is the printer's RSA pubkey, not the slicer's
+  client certificate keypair. The slicer obtains it through a
+  `cert_report` reply that the printer publishes after the MQTT
+  subscription is established (the same round-trip
+  `install_device_cert` triggers).
+
+A native re-implementation of the signing path therefore needs to:
+
+1. Subscribe to the printer's MQTT report topic and capture the
+   `cert_report` reply, then parse out the printer's RSA pubkey.
+2. For `gcode_line` only, RSA-encrypt the `param` value with that
+   pubkey, base64-encode it, and place it under `param_enc`.
+3. Run the canonical-bytes-to-sign computation in §"Signing Details" on
+   the resulting JSON (with `param_enc`, not `param`).
+
+Without this inner transform, the firmware appears to respond with
+`result:"failed"` on the `/report` topic and the gcode line is
+silently dropped.
+
 ## Additional MQTT Commands Observed
 
 ### extrusion_cali_sel
