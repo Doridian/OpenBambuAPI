@@ -78,6 +78,71 @@ internal version is `02.07.00.50`. If you're correlating bug reports or
 log files across installs, the agent version string is what matters for
 the network layer, not the slicer's user-facing version.
 
+## Studio binary verification (the "signed studio" gate)
+
+Before the plugin will **sign** outbound `print.*` control commands, it
+verifies that its host process is a genuine, Bambu-signed BambuStudio
+install. This gate is what makes *control* commands require a signed
+client even though *status/reads* flow regardless: an unsigned control
+publish is silently dropped by post-2025 firmware, which the slicer sees
+as `BAMBU_NETWORK_SIGNED_ERROR` (`-26`) — see
+[cloud-x509-auth.md](cloud-x509-auth.md) for the signing/cert flow itself.
+
+Observed on Windows, plugin `02.07.00.x`. The plugin Authenticode-verifies
+**two** modules with `WinVerifyTrust`:
+
+1. the host executable — resolved via `GetModuleFileName(NULL)`
+   (`bambu-studio.exe`)
+2. `BambuStudio.dll` — the slicer's network-agent code that `LoadLibrary`s
+   the plugin (resolved via `GetModuleFileName(hDllBase)`)
+
+For each module it extracts the signer certificate and compares the
+publisher to a pinned identity:
+
+| Field | Value |
+|-------|-------|
+| Subject | `Shanghai Lunkuo Technology Co., Ltd` (older builds pinned `Shenzhen Tuozhu Technology Co., Ltd.`, that cert expired 2026-02-10) |
+| Issuer | `GlobalSign GCC R45 EV CodeSigning CA 2020` |
+
+The comparison is on the certificate's **full identity (public key / SPKI)**,
+not just the subject string — a self-signed certificate that merely copies
+the subject, serial and issuer name does *not* pass. If either module is
+unsigned or from another publisher, the plugin logs
+`process_network_msg, unsigned_studio` (and `add sign info failed`); the
+command then ships unsigned and the printer rejects it.
+
+The open-source slicer does an *additional*, independent same-publisher
+check before it will even load the plugin: `SummarizeSelf()` /
+`IsSamePublisher()` (in `src/slic3r/Utils/CertificateVerify.cpp` /
+`NetworkAgent.cpp`) compare the host's signer SPKI to the plugin DLL's. A
+host signed by a different publisher than the plugin is refused with
+`module is from another publisher`, and the slicer falls into its
+plugin-redownload loop.
+
+### Note for custom / forked builds (interoperability)
+
+A locally-built (unsigned) BambuStudio fork therefore can read status from
+your own printers but cannot get its *control* commands signed. Because the
+gate checks the genuine signed binaries — not anything secret — you can
+interoperate using the official binaries you already have installed,
+without any private key:
+
+- Launch with a **genuine, version-matched** official `bambu-studio.exe`.
+  It is a thin launcher that `LoadLibrary`s `BambuStudio.dll` and calls the
+  exported `bambustu_main(int argc, char** argv)`; a fork's DLL exports the
+  same entry, so the genuine launcher will happily run your DLL. This
+  satisfies check #1. **Version match matters** — e.g. a `02.06` launcher
+  against a `02.07` plugin faults inside the (now-activated) signing path;
+  align the exe, `BambuStudio.dll` and plugin to the same `02.07.00.x`.
+- Satisfy check #2 by pointing the plugin's verification of your
+  `BambuStudio.dll` at the genuine official `BambuStudio.dll` — e.g. an
+  in-process inline hook on `GetModuleFileNameW/A` (and `CryptQueryObject`)
+  installed *before* the plugin loads, returning the official DLL's path
+  when the plugin resolves your fork's DLL.
+
+With both module checks satisfied the plugin self-decrypts its embedded app
+key and signs `print.*` normally, so commands are accepted by the printer.
+
 ---
 
 Corrections and additions welcome — these are observations from a single
