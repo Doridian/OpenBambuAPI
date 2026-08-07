@@ -128,6 +128,47 @@ Can take the optional query parameters `deviceId`, `after` and `limit`.
 }
 ```
 
+> [!NOTE]
+> Field semantics, observed on a live account with 57 tasks in August 2026:
+>
+> - `status`: `2` = finished, `3` = aborted or failed. `failedType` stayed `0` in both
+>   cases, so it does not distinguish the two.
+> - `costTime` is the *estimated* print time taken from the slice, not the actual runtime.
+>   Aborted tasks still carry the full estimate while `endTime - startTime` is short. Use
+>   `endTime - startTime` for real duration.
+> - `weight` and `length` are likewise slice estimates for the whole job, not what was
+>   actually extruded before an abort.
+> - `material` exists on newer responses but was empty (`{"id": "", "name": ""}`) on every
+>   task; the real filament data is in `amsDetailMapping`.
+>
+> `amsDetailMapping` entries look like this:
+>
+> ```json
+> {
+> 	"ams": 1,
+> 	"sourceColor": "FFFFFFFF",
+> 	"targetColor": "FFFFFFFF",
+> 	"filamentId": "GFG99",
+> 	"filamentType": "PETG",
+> 	"targetFilamentType": "",
+> 	"weight": 163.83,
+> 	"nozzleId": 1,
+> 	"amsId": 0,
+> 	"slotId": 0
+> }
+> ```
+>
+> Newer responses return many more fields than the example above. The full set observed
+> was: `id`, `designId`, `designTitle`, `designTitleTranslated`, `instanceId`,
+> `instanceRatingStatus`, `instRateItem`, `modelId`, `title`, `cover`, `status`,
+> `failedType`, `feedbackStatus`, `startTime`, `endTime`, `weight`, `length`, `costTime`,
+> `profileId`, `plateIndex`, `plateName`, `deviceId`, `amsDetailMapping`, `mode`,
+> `isPublicProfile`, `isPrintable`, `isDelete`, `deviceModel`, `deviceName`, `bedType`,
+> `jobType`, `material`, `platform`, `stepSummary`, `nozzleInfos`, `nozzleMapping`,
+> `snapShot`, `extention`, `filamentSettingIds`, `enableFilamentDynamicMap`, `repetitions`,
+> `useAms`, `pauseType`, `matchFilamentMode`, `amsMapping`, `amsMapping2`, `skipObjects`,
+> `sliceCfg`.
+
 ## POST /v1/user-service/my/task
 
 Creates a task, expects a task object (see above) to be passed via the body.
@@ -307,6 +348,30 @@ Returns a list of possible slicer profiles (`print`, `printer` and `material`) t
 }
 ```
 
+> [!IMPORTANT]
+> The `private` arrays hold the user's own presets and are subject to a server-side quota.
+> Bambu Studio surfaces this as "The number of user presets cached in the cloud has
+> exceeded the upper limit, newly created user presets can only be used locally."
+>
+> The exact quota differs per category and is not fully understood. On one account in
+> August 2026, `print.private` had stopped growing at exactly `100` entries while
+> `filament.private` held `499`, so `print` appears to be capped at 100 whereas `filament`
+> is either capped much higher or not enforced at all.
+>
+> Two things make this awkward in practice:
+>
+> - The `private` entries are not necessarily downloaded again. In the observed case Bambu
+>   Studio synced none of them back, so they were invisible in the UI and could not be
+>   deleted there, while still counting against the quota.
+> - The local `.info` files next to each preset in
+>   `%APPDATA%\BambuStudio\user\{USER_ID}\{filament,process,machine}\` are not a mirror of
+>   the cloud. An empty `user_id` there does *not* mean the preset is absent from the
+>   cloud: 507 of 510 local presets had an empty `user_id` while 499 were present
+>   server-side. Deleting the local files therefore frees no quota.
+>
+> `DELETE /v1/iot-service/api/slicer/setting/{SETTING_ID}` (below) is the reliable way to
+> free slots.
+
 ## GET /v1/iot-service/api/slicer/setting/{SETTING_ID}
 
 Gets the full data of a slicer setting by its id.
@@ -346,6 +411,30 @@ Gets the full data of a slicer setting by its id.
 }
 ```
 
+## DELETE /v1/iot-service/api/slicer/setting/{SETTING_ID}
+
+Deletes a user slicer setting from the cloud, i.e. one of the entries in a `private` array
+of `GET /v1/iot-service/api/slicer/setting`. Verified in August 2026 against a live account.
+
+**Response**
+```json
+{
+	"message": "success",
+	"code": null,
+	"error": null
+}
+```
+
+After a successful delete, `GET /v1/iot-service/api/slicer/setting/{SETTING_ID}` for the same
+id returns HTTP 400, and the entry is gone from the corresponding `private` array.
+
+> [!NOTE]
+> This is the route behind `bambu_network_delete_setting`, exported by
+> `bambu_networking.dll` in the Bambu Studio network plugin. The same library exports
+> `bambu_network_get_setting_list`, `bambu_network_get_setting_list2`,
+> `bambu_network_put_setting` and `bambu_network_request_setting_id`, which line up with
+> the other `slicer/setting` routes.
+
 ## GET /v1/iot-service/api/user/bind
 
 This lists devices "bound" to the current user. As in, all your devices.
@@ -369,6 +458,14 @@ This lists devices "bound" to the current user. As in, all your devices.
 	]
 }
 ```
+
+> [!NOTE]
+> Newer responses (observed August 2026) carry three additional fields per device:
+> `print_job` (id of the current or most recent job, matching `id` in
+> `GET /v1/user-service/my/tasks`), `nozzle_diameter` (e.g. `0.4`) and `dev_structure`
+> (`I3` on bedslingers such as the A1, `CoreXY` on P2S/X1 class machines).
+> `dev_model_name` and `dev_product_name` both return the marketing name on newer
+> models (e.g. `P2S`) rather than an internal code like `BL-P001`.
 
 ## PATCH /v1/iot-service/api/user/device/info
 
